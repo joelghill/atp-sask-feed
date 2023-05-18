@@ -4,16 +4,17 @@
     "lib": [
       "ESNext",
     ], 
-    "outDir": "dist",
-    "module": "CommonJS",
-    "target": "ES6",
+    "outDir": "./dist",
+    "module": "NodeNext",
+    "target": "ESNext",
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "alwaysStrict": true,
     "allowUnreachableCode": false,
     "strictNullChecks": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   },
+  "baseUrl": "./src",
   "include": ["./src/**/*.ts"],
   "exclude": [
     "node_modules"

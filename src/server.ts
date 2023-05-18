@@ -1,13 +1,15 @@
 import http from 'http'
 import events from 'events'
 import express from 'express'
+import AdminJS from 'adminjs'
+import AdminJsExpress from '@adminjs/express'
 import { DidResolver, MemoryCache } from '@atproto/did-resolver'
-import { createServer } from './lexicon'
-import feedGeneration from './feed-generation'
-import { createDb, Database, migrateToLatest } from './db'
-import { FirehoseSubscription } from './subscription'
-import { AppContext, Config } from './config'
-import wellKnown from './well-known'
+import { createServer } from './lexicon/index.js'
+import feedGeneration from './feed-generation.js'
+import { createDb, Database, migrateToLatest } from './db/index.js'
+import { FirehoseSubscription } from './subscription.js'
+import { AppContext, Config } from './config.js'
+import wellKnown from './well-known.js'
 
 export class FeedGenerator {
   public app: express.Application
@@ -36,7 +38,14 @@ export class FeedGenerator {
       subscriptionEndpoint: config?.subscriptionEndpoint ?? 'wss://bsky.social',
       serviceDid: config?.serviceDid ?? 'did:example:test',
     }
+
     const app = express()
+
+    // Setup AdminJS
+    const admin = new AdminJS({})
+    const adminRouter = AdminJsExpress.buildRouter(admin)
+    admin.watch()
+
     const db = createDb(cfg.sqliteLocation)
     const firehose = new FirehoseSubscription(db, cfg.subscriptionEndpoint)
 
@@ -60,8 +69,10 @@ export class FeedGenerator {
       cfg,
     }
     feedGeneration(server, ctx)
+
     app.use(server.xrpc.router)
     app.use(wellKnown(cfg.hostname))
+    app.use(admin.options.rootPath, adminRouter)
 
     return new FeedGenerator(app, db, firehose, cfg)
   }

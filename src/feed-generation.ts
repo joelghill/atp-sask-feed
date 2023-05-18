@@ -1,7 +1,7 @@
 import { InvalidRequestError } from '@atproto/xrpc-server'
-import { Server } from './lexicon'
-import { AppContext } from './config'
-import { validateAuth } from './auth'
+import { Server } from './lexicon/index.js'
+import { AppContext } from './config.js'
+import { validateAuth } from './auth.js'
 
 export default function (server: Server, ctx: AppContext) {
   server.app.bsky.feed.getFeedSkeleton(async ({ params, req }) => {

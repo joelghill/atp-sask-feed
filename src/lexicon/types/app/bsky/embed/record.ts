@@ -2,15 +2,15 @@
  * GENERATED CODE - DO NOT MODIFY
  */
 import { ValidationResult, BlobRef } from '@atproto/lexicon'
-import { lexicons } from '../../../../lexicons'
-import { isObj, hasProp } from '../../../../util'
+import { lexicons } from '../../../../lexicons.js'
+import { isObj, hasProp } from '../../../../util.js'
 import { CID } from 'multiformats/cid'
-import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef'
-import * as AppBskyActorDefs from '../actor/defs'
-import * as ComAtprotoLabelDefs from '../../../com/atproto/label/defs'
-import * as AppBskyEmbedImages from './images'
-import * as AppBskyEmbedExternal from './external'
-import * as AppBskyEmbedRecordWithMedia from './recordWithMedia'
+import * as ComAtprotoRepoStrongRef from '../../../com/atproto/repo/strongRef.js'
+import * as AppBskyActorDefs from '../actor/defs.js'
+import * as ComAtprotoLabelDefs from '../../../com/atproto/label/defs.js'
+import * as AppBskyEmbedImages from './images.js'
+import * as AppBskyEmbedExternal from './external.js'
+import * as AppBskyEmbedRecordWithMedia from './recordWithMedia.js'
 
 export interface Main {
   record: ComAtprotoRepoStrongRef.Main

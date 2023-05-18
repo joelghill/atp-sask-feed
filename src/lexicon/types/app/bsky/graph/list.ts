@@ -2,11 +2,11 @@
  * GENERATED CODE - DO NOT MODIFY
  */
 import { ValidationResult, BlobRef } from '@atproto/lexicon'
-import { lexicons } from '../../../../lexicons'
-import { isObj, hasProp } from '../../../../util'
+import { lexicons } from '../../../../lexicons.js'
+import { isObj, hasProp } from '../../../../util.js'
 import { CID } from 'multiformats/cid'
-import * as AppBskyGraphDefs from './defs'
-import * as AppBskyRichtextFacet from '../richtext/facet'
+import * as AppBskyGraphDefs from './defs.js'
+import * as AppBskyRichtextFacet from '../richtext/facet.js'
 
 export interface Record {
   purpose: AppBskyGraphDefs.ListPurpose
