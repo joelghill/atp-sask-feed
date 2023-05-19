@@ -13,6 +13,8 @@
     "allowUnreachableCode": false,
     "strictNullChecks": true,
     "skipLibCheck": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
   },
   "baseUrl": "./src",
   "include": ["./src/**/*.ts"],

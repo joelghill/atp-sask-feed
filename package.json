@@ -28,7 +28,11 @@
     "express-session": "^1.17.3",
     "kysely": "^0.22.0",
     "multiformats": "^9.9.0",
-    "tslib": "^2.5.2"
+    "pg": "^8.11.0",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.1.6",
+    "tslib": "^2.5.2",
+    "typeorm": "^0.3.16"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.4",
