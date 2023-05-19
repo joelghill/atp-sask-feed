@@ -1,6 +1,6 @@
-import { Server } from '../lexicon'
-import { AppContext } from '../config'
-import algos from '../algos'
+import { Server } from '../lexicon/index.js'
+import { AppContext } from '../config.js'
+import algos from '../algos/index.js'
 
 export default function (server: Server, ctx: AppContext) {
   server.app.bsky.feed.describeFeedGenerator(async () => {

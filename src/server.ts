@@ -7,10 +7,10 @@ import { DidResolver, MemoryCache } from '@atproto/did-resolver'
 import { createServer } from './lexicon/index.js'
 import feedGeneration from './methods/feed-generation.js'
 import describeGenerator from './methods/describe-generator.js'
-import { createDb, Database, migrateToLatest } from './db'
-import { FirehoseSubscription } from './subscription'
-import { AppContext, Config } from './config'
-import wellKnown from './well-known'
+import { createDb, Database, migrateToLatest } from './db/index.js'
+import { FirehoseSubscription } from './subscription.js'
+import { AppContext, Config } from './config.js'
+import wellKnown from './well-known.js'
 
 export class FeedGenerator {
   public app: express.Application

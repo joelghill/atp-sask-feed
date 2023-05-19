@@ -1,6 +1,6 @@
 import { InvalidRequestError } from '@atproto/xrpc-server'
-import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton'
-import { AppContext } from '../config'
+import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton.js'
+import { AppContext } from '../config.js'
 
 export const uri = 'at://did:example:alice/app.bsky.feed.generator/whats-alf'
 
