@@ -5,11 +5,12 @@ import AdminJS from 'adminjs'
 import AdminJsExpress from '@adminjs/express'
 import { DidResolver, MemoryCache } from '@atproto/did-resolver'
 import { createServer } from './lexicon/index.js'
-import feedGeneration from './feed-generation.js'
-import { createDb, Database, migrateToLatest } from './db/index.js'
-import { FirehoseSubscription } from './subscription.js'
-import { AppContext, Config } from './config.js'
-import wellKnown from './well-known.js'
+import feedGeneration from './methods/feed-generation.js'
+import describeGenerator from './methods/describe-generator.js'
+import { createDb, Database, migrateToLatest } from './db'
+import { FirehoseSubscription } from './subscription'
+import { AppContext, Config } from './config'
+import wellKnown from './well-known'
 
 export class FeedGenerator {
   public app: express.Application
@@ -30,15 +31,7 @@ export class FeedGenerator {
     this.cfg = cfg
   }
 
-  static create(config?: Partial<Config>) {
-    const cfg: Config = {
-      port: config?.port ?? 3000,
-      hostname: config?.hostname ?? 'feed-generator.test',
-      sqliteLocation: config?.sqliteLocation ?? ':memory:',
-      subscriptionEndpoint: config?.subscriptionEndpoint ?? 'wss://bsky.social',
-      serviceDid: config?.serviceDid ?? 'did:example:test',
-    }
-
+  static create(cfg: Config) {
     const app = express()
 
     // Setup AdminJS
@@ -69,9 +62,9 @@ export class FeedGenerator {
       cfg,
     }
     feedGeneration(server, ctx)
-
+    describeGenerator(server, ctx)
     app.use(server.xrpc.router)
-    app.use(wellKnown(cfg.hostname))
+    app.use(wellKnown(ctx))
     app.use(admin.options.rootPath, adminRouter)
 
     return new FeedGenerator(app, db, firehose, cfg)

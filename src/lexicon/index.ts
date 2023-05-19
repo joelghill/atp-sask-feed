@@ -8,97 +8,101 @@ import {
   AuthVerifier,
   StreamAuthVerifier,
 } from '@atproto/xrpc-server'
-import { schemas } from './lexicons.js'
-import * as ComAtprotoAdminDisableAccountInvites from './types/com/atproto/admin/disableAccountInvites.js'
-import * as ComAtprotoAdminDisableInviteCodes from './types/com/atproto/admin/disableInviteCodes.js'
-import * as ComAtprotoAdminEnableAccountInvites from './types/com/atproto/admin/enableAccountInvites.js'
-import * as ComAtprotoAdminGetInviteCodes from './types/com/atproto/admin/getInviteCodes.js'
-import * as ComAtprotoAdminGetModerationAction from './types/com/atproto/admin/getModerationAction.js'
-import * as ComAtprotoAdminGetModerationActions from './types/com/atproto/admin/getModerationActions.js'
-import * as ComAtprotoAdminGetModerationReport from './types/com/atproto/admin/getModerationReport.js'
-import * as ComAtprotoAdminGetModerationReports from './types/com/atproto/admin/getModerationReports.js'
-import * as ComAtprotoAdminGetRecord from './types/com/atproto/admin/getRecord.js'
-import * as ComAtprotoAdminGetRepo from './types/com/atproto/admin/getRepo.js'
-import * as ComAtprotoAdminResolveModerationReports from './types/com/atproto/admin/resolveModerationReports.js'
-import * as ComAtprotoAdminReverseModerationAction from './types/com/atproto/admin/reverseModerationAction.js'
-import * as ComAtprotoAdminSearchRepos from './types/com/atproto/admin/searchRepos.js'
-import * as ComAtprotoAdminTakeModerationAction from './types/com/atproto/admin/takeModerationAction.js'
-import * as ComAtprotoAdminUpdateAccountEmail from './types/com/atproto/admin/updateAccountEmail.js'
-import * as ComAtprotoAdminUpdateAccountHandle from './types/com/atproto/admin/updateAccountHandle.js'
-import * as ComAtprotoIdentityResolveHandle from './types/com/atproto/identity/resolveHandle.js'
-import * as ComAtprotoIdentityUpdateHandle from './types/com/atproto/identity/updateHandle.js'
-import * as ComAtprotoLabelQueryLabels from './types/com/atproto/label/queryLabels.js'
-import * as ComAtprotoLabelSubscribeLabels from './types/com/atproto/label/subscribeLabels.js'
-import * as ComAtprotoModerationCreateReport from './types/com/atproto/moderation/createReport.js'
-import * as ComAtprotoRepoApplyWrites from './types/com/atproto/repo/applyWrites.js'
-import * as ComAtprotoRepoCreateRecord from './types/com/atproto/repo/createRecord.js'
-import * as ComAtprotoRepoDeleteRecord from './types/com/atproto/repo/deleteRecord.js'
-import * as ComAtprotoRepoDescribeRepo from './types/com/atproto/repo/describeRepo.js'
-import * as ComAtprotoRepoGetRecord from './types/com/atproto/repo/getRecord.js'
-import * as ComAtprotoRepoListRecords from './types/com/atproto/repo/listRecords.js'
-import * as ComAtprotoRepoPutRecord from './types/com/atproto/repo/putRecord.js'
-import * as ComAtprotoRepoRebaseRepo from './types/com/atproto/repo/rebaseRepo.js'
-import * as ComAtprotoRepoUploadBlob from './types/com/atproto/repo/uploadBlob.js'
-import * as ComAtprotoServerCreateAccount from './types/com/atproto/server/createAccount.js'
-import * as ComAtprotoServerCreateAppPassword from './types/com/atproto/server/createAppPassword.js'
-import * as ComAtprotoServerCreateInviteCode from './types/com/atproto/server/createInviteCode.js'
-import * as ComAtprotoServerCreateInviteCodes from './types/com/atproto/server/createInviteCodes.js'
-import * as ComAtprotoServerCreateSession from './types/com/atproto/server/createSession.js'
-import * as ComAtprotoServerDeleteAccount from './types/com/atproto/server/deleteAccount.js'
-import * as ComAtprotoServerDeleteSession from './types/com/atproto/server/deleteSession.js'
-import * as ComAtprotoServerDescribeServer from './types/com/atproto/server/describeServer.js'
-import * as ComAtprotoServerGetAccountInviteCodes from './types/com/atproto/server/getAccountInviteCodes.js'
-import * as ComAtprotoServerGetSession from './types/com/atproto/server/getSession.js'
-import * as ComAtprotoServerListAppPasswords from './types/com/atproto/server/listAppPasswords.js'
-import * as ComAtprotoServerRefreshSession from './types/com/atproto/server/refreshSession.js'
-import * as ComAtprotoServerRequestAccountDelete from './types/com/atproto/server/requestAccountDelete.js'
-import * as ComAtprotoServerRequestPasswordReset from './types/com/atproto/server/requestPasswordReset.js'
-import * as ComAtprotoServerResetPassword from './types/com/atproto/server/resetPassword.js'
-import * as ComAtprotoServerRevokeAppPassword from './types/com/atproto/server/revokeAppPassword.js'
-import * as ComAtprotoSyncGetBlob from './types/com/atproto/sync/getBlob.js'
-import * as ComAtprotoSyncGetBlocks from './types/com/atproto/sync/getBlocks.js'
-import * as ComAtprotoSyncGetCheckout from './types/com/atproto/sync/getCheckout.js'
-import * as ComAtprotoSyncGetCommitPath from './types/com/atproto/sync/getCommitPath.js'
-import * as ComAtprotoSyncGetHead from './types/com/atproto/sync/getHead.js'
-import * as ComAtprotoSyncGetRecord from './types/com/atproto/sync/getRecord.js'
-import * as ComAtprotoSyncGetRepo from './types/com/atproto/sync/getRepo.js'
-import * as ComAtprotoSyncListBlobs from './types/com/atproto/sync/listBlobs.js'
-import * as ComAtprotoSyncListRepos from './types/com/atproto/sync/listRepos.js'
-import * as ComAtprotoSyncNotifyOfUpdate from './types/com/atproto/sync/notifyOfUpdate.js'
-import * as ComAtprotoSyncRequestCrawl from './types/com/atproto/sync/requestCrawl.js'
-import * as ComAtprotoSyncSubscribeRepos from './types/com/atproto/sync/subscribeRepos.js'
-import * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile.js'
-import * as AppBskyActorGetProfiles from './types/app/bsky/actor/getProfiles.js'
-import * as AppBskyActorGetSuggestions from './types/app/bsky/actor/getSuggestions.js'
-import * as AppBskyActorSearchActors from './types/app/bsky/actor/searchActors.js'
-import * as AppBskyActorSearchActorsTypeahead from './types/app/bsky/actor/searchActorsTypeahead.js'
-import * as AppBskyFeedBookmarkFeed from './types/app/bsky/feed/bookmarkFeed.js'
-import * as AppBskyFeedGetActorFeeds from './types/app/bsky/feed/getActorFeeds.js'
-import * as AppBskyFeedGetAuthorFeed from './types/app/bsky/feed/getAuthorFeed.js'
-import * as AppBskyFeedGetBookmarkedFeeds from './types/app/bsky/feed/getBookmarkedFeeds.js'
-import * as AppBskyFeedGetFeed from './types/app/bsky/feed/getFeed.js'
-import * as AppBskyFeedGetFeedSkeleton from './types/app/bsky/feed/getFeedSkeleton.js'
-import * as AppBskyFeedGetLikes from './types/app/bsky/feed/getLikes.js'
-import * as AppBskyFeedGetPostThread from './types/app/bsky/feed/getPostThread.js'
-import * as AppBskyFeedGetPosts from './types/app/bsky/feed/getPosts.js'
-import * as AppBskyFeedGetRepostedBy from './types/app/bsky/feed/getRepostedBy.js'
-import * as AppBskyFeedGetTimeline from './types/app/bsky/feed/getTimeline.js'
-import * as AppBskyFeedUnbookmarkFeed from './types/app/bsky/feed/unbookmarkFeed.js'
-import * as AppBskyGraphGetBlocks from './types/app/bsky/graph/getBlocks.js'
-import * as AppBskyGraphGetFollowers from './types/app/bsky/graph/getFollowers.js'
-import * as AppBskyGraphGetFollows from './types/app/bsky/graph/getFollows.js'
-import * as AppBskyGraphGetList from './types/app/bsky/graph/getList.js'
-import * as AppBskyGraphGetListMutes from './types/app/bsky/graph/getListMutes.js'
-import * as AppBskyGraphGetLists from './types/app/bsky/graph/getLists.js'
-import * as AppBskyGraphGetMutes from './types/app/bsky/graph/getMutes.js'
-import * as AppBskyGraphMuteActor from './types/app/bsky/graph/muteActor.js'
-import * as AppBskyGraphMuteActorList from './types/app/bsky/graph/muteActorList.js'
-import * as AppBskyGraphUnmuteActor from './types/app/bsky/graph/unmuteActor.js'
-import * as AppBskyGraphUnmuteActorList from './types/app/bsky/graph/unmuteActorList.js'
-import * as AppBskyNotificationGetUnreadCount from './types/app/bsky/notification/getUnreadCount.js'
-import * as AppBskyNotificationListNotifications from './types/app/bsky/notification/listNotifications.js'
-import * as AppBskyNotificationUpdateSeen from './types/app/bsky/notification/updateSeen.js'
-import * as AppBskyUnspeccedGetPopular from './types/app/bsky/unspecced/getPopular.js'
+import { schemas } from './lexicons'
+import * as ComAtprotoAdminDisableAccountInvites from './types/com/atproto/admin/disableAccountInvites'
+import * as ComAtprotoAdminDisableInviteCodes from './types/com/atproto/admin/disableInviteCodes'
+import * as ComAtprotoAdminEnableAccountInvites from './types/com/atproto/admin/enableAccountInvites'
+import * as ComAtprotoAdminGetInviteCodes from './types/com/atproto/admin/getInviteCodes'
+import * as ComAtprotoAdminGetModerationAction from './types/com/atproto/admin/getModerationAction'
+import * as ComAtprotoAdminGetModerationActions from './types/com/atproto/admin/getModerationActions'
+import * as ComAtprotoAdminGetModerationReport from './types/com/atproto/admin/getModerationReport'
+import * as ComAtprotoAdminGetModerationReports from './types/com/atproto/admin/getModerationReports'
+import * as ComAtprotoAdminGetRecord from './types/com/atproto/admin/getRecord'
+import * as ComAtprotoAdminGetRepo from './types/com/atproto/admin/getRepo'
+import * as ComAtprotoAdminResolveModerationReports from './types/com/atproto/admin/resolveModerationReports'
+import * as ComAtprotoAdminReverseModerationAction from './types/com/atproto/admin/reverseModerationAction'
+import * as ComAtprotoAdminSearchRepos from './types/com/atproto/admin/searchRepos'
+import * as ComAtprotoAdminTakeModerationAction from './types/com/atproto/admin/takeModerationAction'
+import * as ComAtprotoAdminUpdateAccountEmail from './types/com/atproto/admin/updateAccountEmail'
+import * as ComAtprotoAdminUpdateAccountHandle from './types/com/atproto/admin/updateAccountHandle'
+import * as ComAtprotoIdentityResolveHandle from './types/com/atproto/identity/resolveHandle'
+import * as ComAtprotoIdentityUpdateHandle from './types/com/atproto/identity/updateHandle'
+import * as ComAtprotoLabelQueryLabels from './types/com/atproto/label/queryLabels'
+import * as ComAtprotoLabelSubscribeLabels from './types/com/atproto/label/subscribeLabels'
+import * as ComAtprotoModerationCreateReport from './types/com/atproto/moderation/createReport'
+import * as ComAtprotoRepoApplyWrites from './types/com/atproto/repo/applyWrites'
+import * as ComAtprotoRepoCreateRecord from './types/com/atproto/repo/createRecord'
+import * as ComAtprotoRepoDeleteRecord from './types/com/atproto/repo/deleteRecord'
+import * as ComAtprotoRepoDescribeRepo from './types/com/atproto/repo/describeRepo'
+import * as ComAtprotoRepoGetRecord from './types/com/atproto/repo/getRecord'
+import * as ComAtprotoRepoListRecords from './types/com/atproto/repo/listRecords'
+import * as ComAtprotoRepoPutRecord from './types/com/atproto/repo/putRecord'
+import * as ComAtprotoRepoRebaseRepo from './types/com/atproto/repo/rebaseRepo'
+import * as ComAtprotoRepoUploadBlob from './types/com/atproto/repo/uploadBlob'
+import * as ComAtprotoServerCreateAccount from './types/com/atproto/server/createAccount'
+import * as ComAtprotoServerCreateAppPassword from './types/com/atproto/server/createAppPassword'
+import * as ComAtprotoServerCreateInviteCode from './types/com/atproto/server/createInviteCode'
+import * as ComAtprotoServerCreateInviteCodes from './types/com/atproto/server/createInviteCodes'
+import * as ComAtprotoServerCreateSession from './types/com/atproto/server/createSession'
+import * as ComAtprotoServerDeleteAccount from './types/com/atproto/server/deleteAccount'
+import * as ComAtprotoServerDeleteSession from './types/com/atproto/server/deleteSession'
+import * as ComAtprotoServerDescribeServer from './types/com/atproto/server/describeServer'
+import * as ComAtprotoServerGetAccountInviteCodes from './types/com/atproto/server/getAccountInviteCodes'
+import * as ComAtprotoServerGetSession from './types/com/atproto/server/getSession'
+import * as ComAtprotoServerListAppPasswords from './types/com/atproto/server/listAppPasswords'
+import * as ComAtprotoServerRefreshSession from './types/com/atproto/server/refreshSession'
+import * as ComAtprotoServerRequestAccountDelete from './types/com/atproto/server/requestAccountDelete'
+import * as ComAtprotoServerRequestPasswordReset from './types/com/atproto/server/requestPasswordReset'
+import * as ComAtprotoServerResetPassword from './types/com/atproto/server/resetPassword'
+import * as ComAtprotoServerRevokeAppPassword from './types/com/atproto/server/revokeAppPassword'
+import * as ComAtprotoSyncGetBlob from './types/com/atproto/sync/getBlob'
+import * as ComAtprotoSyncGetBlocks from './types/com/atproto/sync/getBlocks'
+import * as ComAtprotoSyncGetCheckout from './types/com/atproto/sync/getCheckout'
+import * as ComAtprotoSyncGetCommitPath from './types/com/atproto/sync/getCommitPath'
+import * as ComAtprotoSyncGetHead from './types/com/atproto/sync/getHead'
+import * as ComAtprotoSyncGetRecord from './types/com/atproto/sync/getRecord'
+import * as ComAtprotoSyncGetRepo from './types/com/atproto/sync/getRepo'
+import * as ComAtprotoSyncListBlobs from './types/com/atproto/sync/listBlobs'
+import * as ComAtprotoSyncListRepos from './types/com/atproto/sync/listRepos'
+import * as ComAtprotoSyncNotifyOfUpdate from './types/com/atproto/sync/notifyOfUpdate'
+import * as ComAtprotoSyncRequestCrawl from './types/com/atproto/sync/requestCrawl'
+import * as ComAtprotoSyncSubscribeRepos from './types/com/atproto/sync/subscribeRepos'
+import * as AppBskyActorGetPreferences from './types/app/bsky/actor/getPreferences'
+import * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile'
+import * as AppBskyActorGetProfiles from './types/app/bsky/actor/getProfiles'
+import * as AppBskyActorGetSuggestions from './types/app/bsky/actor/getSuggestions'
+import * as AppBskyActorPutPreferences from './types/app/bsky/actor/putPreferences'
+import * as AppBskyActorSearchActors from './types/app/bsky/actor/searchActors'
+import * as AppBskyActorSearchActorsTypeahead from './types/app/bsky/actor/searchActorsTypeahead'
+import * as AppBskyFeedDescribeFeedGenerator from './types/app/bsky/feed/describeFeedGenerator'
+import * as AppBskyFeedGetActorFeeds from './types/app/bsky/feed/getActorFeeds'
+import * as AppBskyFeedGetAuthorFeed from './types/app/bsky/feed/getAuthorFeed'
+import * as AppBskyFeedGetFeed from './types/app/bsky/feed/getFeed'
+import * as AppBskyFeedGetFeedGenerator from './types/app/bsky/feed/getFeedGenerator'
+import * as AppBskyFeedGetFeedSkeleton from './types/app/bsky/feed/getFeedSkeleton'
+import * as AppBskyFeedGetLikes from './types/app/bsky/feed/getLikes'
+import * as AppBskyFeedGetPostThread from './types/app/bsky/feed/getPostThread'
+import * as AppBskyFeedGetPosts from './types/app/bsky/feed/getPosts'
+import * as AppBskyFeedGetRepostedBy from './types/app/bsky/feed/getRepostedBy'
+import * as AppBskyFeedGetSavedFeeds from './types/app/bsky/feed/getSavedFeeds'
+import * as AppBskyFeedGetTimeline from './types/app/bsky/feed/getTimeline'
+import * as AppBskyFeedSaveFeed from './types/app/bsky/feed/saveFeed'
+import * as AppBskyFeedUnsaveFeed from './types/app/bsky/feed/unsaveFeed'
+import * as AppBskyGraphGetBlocks from './types/app/bsky/graph/getBlocks'
+import * as AppBskyGraphGetFollowers from './types/app/bsky/graph/getFollowers'
+import * as AppBskyGraphGetFollows from './types/app/bsky/graph/getFollows'
+import * as AppBskyGraphGetList from './types/app/bsky/graph/getList'
+import * as AppBskyGraphGetListMutes from './types/app/bsky/graph/getListMutes'
+import * as AppBskyGraphGetLists from './types/app/bsky/graph/getLists'
+import * as AppBskyGraphGetMutes from './types/app/bsky/graph/getMutes'
+import * as AppBskyGraphMuteActor from './types/app/bsky/graph/muteActor'
+import * as AppBskyGraphMuteActorList from './types/app/bsky/graph/muteActorList'
+import * as AppBskyGraphUnmuteActor from './types/app/bsky/graph/unmuteActor'
+import * as AppBskyGraphUnmuteActorList from './types/app/bsky/graph/unmuteActorList'
+import * as AppBskyNotificationGetUnreadCount from './types/app/bsky/notification/getUnreadCount'
+import * as AppBskyNotificationListNotifications from './types/app/bsky/notification/listNotifications'
+import * as AppBskyNotificationUpdateSeen from './types/app/bsky/notification/updateSeen'
+import * as AppBskyUnspeccedGetPopular from './types/app/bsky/unspecced/getPopular'
 
 export const COM_ATPROTO_ADMIN = {
   DefsTakedown: 'com.atproto.admin.defs#takedown',
@@ -730,6 +734,13 @@ export class ActorNS {
     this._server = server
   }
 
+  getPreferences<AV extends AuthVerifier>(
+    cfg: ConfigOf<AV, AppBskyActorGetPreferences.Handler<ExtractAuth<AV>>>,
+  ) {
+    const nsid = 'app.bsky.actor.getPreferences' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
   getProfile<AV extends AuthVerifier>(
     cfg: ConfigOf<AV, AppBskyActorGetProfile.Handler<ExtractAuth<AV>>>,
   ) {
@@ -748,6 +759,13 @@ export class ActorNS {
     cfg: ConfigOf<AV, AppBskyActorGetSuggestions.Handler<ExtractAuth<AV>>>,
   ) {
     const nsid = 'app.bsky.actor.getSuggestions' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  putPreferences<AV extends AuthVerifier>(
+    cfg: ConfigOf<AV, AppBskyActorPutPreferences.Handler<ExtractAuth<AV>>>,
+  ) {
+    const nsid = 'app.bsky.actor.putPreferences' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
@@ -784,10 +802,13 @@ export class FeedNS {
     this._server = server
   }
 
-  bookmarkFeed<AV extends AuthVerifier>(
-    cfg: ConfigOf<AV, AppBskyFeedBookmarkFeed.Handler<ExtractAuth<AV>>>,
+  describeFeedGenerator<AV extends AuthVerifier>(
+    cfg: ConfigOf<
+      AV,
+      AppBskyFeedDescribeFeedGenerator.Handler<ExtractAuth<AV>>
+    >,
   ) {
-    const nsid = 'app.bsky.feed.bookmarkFeed' // @ts-ignore
+    const nsid = 'app.bsky.feed.describeFeedGenerator' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
@@ -805,17 +826,17 @@ export class FeedNS {
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  getBookmarkedFeeds<AV extends AuthVerifier>(
-    cfg: ConfigOf<AV, AppBskyFeedGetBookmarkedFeeds.Handler<ExtractAuth<AV>>>,
-  ) {
-    const nsid = 'app.bsky.feed.getBookmarkedFeeds' // @ts-ignore
-    return this._server.xrpc.method(nsid, cfg)
-  }
-
   getFeed<AV extends AuthVerifier>(
     cfg: ConfigOf<AV, AppBskyFeedGetFeed.Handler<ExtractAuth<AV>>>,
   ) {
     const nsid = 'app.bsky.feed.getFeed' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  getFeedGenerator<AV extends AuthVerifier>(
+    cfg: ConfigOf<AV, AppBskyFeedGetFeedGenerator.Handler<ExtractAuth<AV>>>,
+  ) {
+    const nsid = 'app.bsky.feed.getFeedGenerator' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 
@@ -854,6 +875,13 @@ export class FeedNS {
     return this._server.xrpc.method(nsid, cfg)
   }
 
+  getSavedFeeds<AV extends AuthVerifier>(
+    cfg: ConfigOf<AV, AppBskyFeedGetSavedFeeds.Handler<ExtractAuth<AV>>>,
+  ) {
+    const nsid = 'app.bsky.feed.getSavedFeeds' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
   getTimeline<AV extends AuthVerifier>(
     cfg: ConfigOf<AV, AppBskyFeedGetTimeline.Handler<ExtractAuth<AV>>>,
   ) {
@@ -861,10 +889,17 @@ export class FeedNS {
     return this._server.xrpc.method(nsid, cfg)
   }
 
-  unbookmarkFeed<AV extends AuthVerifier>(
-    cfg: ConfigOf<AV, AppBskyFeedUnbookmarkFeed.Handler<ExtractAuth<AV>>>,
+  saveFeed<AV extends AuthVerifier>(
+    cfg: ConfigOf<AV, AppBskyFeedSaveFeed.Handler<ExtractAuth<AV>>>,
   ) {
-    const nsid = 'app.bsky.feed.unbookmarkFeed' // @ts-ignore
+    const nsid = 'app.bsky.feed.saveFeed' // @ts-ignore
+    return this._server.xrpc.method(nsid, cfg)
+  }
+
+  unsaveFeed<AV extends AuthVerifier>(
+    cfg: ConfigOf<AV, AppBskyFeedUnsaveFeed.Handler<ExtractAuth<AV>>>,
+  ) {
+    const nsid = 'app.bsky.feed.unsaveFeed' // @ts-ignore
     return this._server.xrpc.method(nsid, cfg)
   }
 }
