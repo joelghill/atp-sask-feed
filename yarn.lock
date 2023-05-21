@@ -47,6 +47,11 @@
   resolved "https://registry.yarnpkg.com/@adminjs/express/-/express-6.0.0.tgz#9ad77dda79034682aee22f746f9b9460d5e5739a"
   integrity sha512-TIylSszG5yUp+uHFYWWCrlztViiR05KM7suDo4SWd4UezZYc0mwNgfYPsnEmKkf5VFMEiCtYqhdCt38OxUPn/g==
 
+"@adminjs/typeorm@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@adminjs/typeorm/-/typeorm-5.0.0.tgz#7dddc339ab00a82477a20803701c6045011a1b31"
+  integrity sha512-woJWm0bw13EOt+L6RMYTWcpfb8vxOU5GW5AvmwktWngNAQU7R5mJOU7V+/rtrFgJePI3fkpLhe053/rtotRcGg==
+
 "@ampproject/remapping@^2.2.0":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.1.tgz#99e8e11851128b8702cd57c33684f1d0f260b630"

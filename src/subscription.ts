@@ -1,8 +1,10 @@
+import { Post } from './entity/post.js'
 import {
   OutputSchema as RepoEvent,
   isCommit,
 } from './lexicon/types/com/atproto/sync/subscribeRepos.js'
 import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription.js'
+import { In } from 'typeorm'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
   async handleEvent(evt: RepoEvent) {
@@ -24,27 +26,20 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       })
       .map((create) => {
         // map alf-related posts to a db row
-        return {
-          uri: create.uri,
-          cid: create.cid,
-          replyParent: create.record?.reply?.parent.uri ?? null,
-          replyRoot: create.record?.reply?.root.uri ?? null,
-          indexedAt: new Date().toISOString(),
-        }
+        const post = new Post()
+        post.uri = create.uri
+        post.cid = create.cid
+        post.replyParent = create.record?.reply?.parent.uri ?? null
+        post.replyRoot = create.record?.reply?.root.uri ?? null
+        post.indexedAt = new Date() 
+        return post    
       })
 
     if (postsToDelete.length > 0) {
-      await this.db
-        .deleteFrom('post')
-        .where('uri', 'in', postsToDelete)
-        .execute()
+      await this.posts.delete({ uri: In(postsToDelete) })
     }
     if (postsToCreate.length > 0) {
-      await this.db
-        .insertInto('post')
-        .values(postsToCreate)
-        .onConflict((oc) => oc.doNothing())
-        .execute()
+      this.posts.save(postsToCreate)
     }
   }
 }

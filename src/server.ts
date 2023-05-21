@@ -4,24 +4,27 @@ import express from 'express'
 import AdminJS from 'adminjs'
 import AdminJsExpress from '@adminjs/express'
 import { DidResolver, MemoryCache } from '@atproto/did-resolver'
+import { DataSource } from 'typeorm'
 import { createServer } from './lexicon/index.js'
 import feedGeneration from './methods/feed-generation.js'
 import describeGenerator from './methods/describe-generator.js'
-import { createDb, Database, migrateToLatest } from './db/index.js'
 import { FirehoseSubscription } from './subscription.js'
 import { AppContext, Config } from './config.js'
 import wellKnown from './well-known.js'
+import { Post } from './entity/post.js'
+import { SubState } from './entity/sub-state.js'
+
 
 export class FeedGenerator {
   public app: express.Application
   public server?: http.Server
-  public db: Database
+  public db: DataSource
   public firehose: FirehoseSubscription
   public cfg: Config
 
   constructor(
     app: express.Application,
-    db: Database,
+    db: DataSource,
     firehose: FirehoseSubscription,
     cfg: Config,
   ) {
@@ -31,15 +34,17 @@ export class FeedGenerator {
     this.cfg = cfg
   }
 
-  static create(cfg: Config) {
+  static create(db: DataSource, cfg: Config) {
     const app = express()
 
+    const adminOptions = {
+      resources: [Post, SubState],
+    }
     // Setup AdminJS
-    const admin = new AdminJS({})
+    const admin = new AdminJS(adminOptions)
     const adminRouter = AdminJsExpress.buildRouter(admin)
     admin.watch()
 
-    const db = createDb(cfg.sqliteLocation)
     const firehose = new FirehoseSubscription(db, cfg.subscriptionEndpoint)
 
     const didCache = new MemoryCache()
@@ -56,11 +61,13 @@ export class FeedGenerator {
         blobLimit: 5 * 1024 * 1024, // 5mb
       },
     })
+
     const ctx: AppContext = {
       db,
       didResolver,
       cfg,
     }
+
     feedGeneration(server, ctx)
     describeGenerator(server, ctx)
     app.use(server.xrpc.router)
@@ -71,7 +78,6 @@ export class FeedGenerator {
   }
 
   async start(): Promise<http.Server> {
-    await migrateToLatest(this.db)
     this.firehose.run()
     this.server = this.app.listen(this.cfg.port)
     await events.once(this.server, 'listening')

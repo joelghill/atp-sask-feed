@@ -11,12 +11,21 @@ import {
   OutputSchema as RepoEvent,
   isCommit,
 } from '../lexicon/types/com/atproto/sync/subscribeRepos.js'
-import { Database } from '../db/index.js'
+import { DataSource, Repository } from 'typeorm'
+import { Post } from '../entity/post.js'
+import { SubState } from '../entity/sub-state.js'
 
 export abstract class FirehoseSubscriptionBase {
   public sub: Subscription<RepoEvent>
 
-  constructor(public db: Database, public service: string) {
+  protected posts: Repository<Post>
+  protected subStates: Repository<SubState>
+
+  constructor(public db: DataSource, public service: string) {
+    // Initialize cursor repository
+    this.subStates = db.getRepository(SubState)
+    this.posts = db.getRepository(Post)
+
     this.sub = new Subscription({
       service: service,
       method: ids.ComAtprotoSyncSubscribeRepos,
@@ -51,19 +60,11 @@ export abstract class FirehoseSubscriptionBase {
   }
 
   async updateCursor(cursor: number) {
-    await this.db
-      .updateTable('sub_state')
-      .set({ cursor })
-      .where('service', '=', this.service)
-      .execute()
+    await this.subStates.update({ service: this.service }, { cursor: cursor })
   }
 
   async getCursor(): Promise<{ cursor?: number }> {
-    const res = await this.db
-      .selectFrom('sub_state')
-      .selectAll()
-      .where('service', '=', this.service)
-      .executeTakeFirst()
+    const res = await this.subStates.findOneBy({ service: this.service })
     return res ? { cursor: res.cursor } : {}
   }
 }

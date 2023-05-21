@@ -1,8 +1,8 @@
-import { Database } from './db/index.js'
+import { DataSource } from 'typeorm'
 import { DidResolver } from '@atproto/did-resolver'
 
 export type AppContext = {
-  db: Database
+  db: DataSource
   didResolver: DidResolver
   cfg: Config
 }
