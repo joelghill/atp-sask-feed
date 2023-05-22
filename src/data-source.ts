@@ -1,12 +1,48 @@
 import { DataSource } from 'typeorm'
+import AdminJS from 'adminjs'
+import * as AdminJSTypeorm from '@adminjs/typeorm'
 import { Post } from './entity/post.js'
 import { SubState } from './entity/sub-state.js'
 import { Subscriber } from './entity/subscriber.js'
+import { Config } from './config.js'
 
-// SQLite Datasource
-export const sqliteDatSource = new DataSource({
-  type: 'sqlite',
-  database: 'db.sqlite',
-  entities: [Post, SubState, Subscriber],
-  synchronize: true,
+AdminJS.registerAdapter({
+  Resource: AdminJSTypeorm.Resource,
+  Database: AdminJSTypeorm.Database,
 })
+
+/**
+ * Gets an initialized DataSource instance based on the provided config.
+ * @param config The configuration.
+ * @returns An initialized DataSource instance.
+ */
+export async function getDataSource(config: Config): Promise<DataSource> {
+  let db: DataSource | undefined = undefined
+  if (config.dbType === 'sqlite') {
+    db = new DataSource({
+      type: 'sqlite',
+      database: config.sqliteLocation,
+      entities: [Post, SubState, Subscriber],
+      synchronize: true,
+    })
+  }
+  if (config.dbType === 'postgres') {
+    db = new DataSource({
+      type: 'postgres',
+      host: config.dbHost,
+      port: config.dbPort,
+      username: config.dbUsername,
+      password: config.dbPassword,
+      database: config.dbName,
+      entities: [Post, SubState, Subscriber],
+      synchronize: true,
+    })
+  }
+
+  if (db) {
+    await db.initialize()
+    return db
+  }
+
+  throw new Error(`Unknown database type: ${config.dbType}`)
+}
