@@ -4,7 +4,6 @@ import express from 'express'
 import AdminJS from 'adminjs'
 import AdminJsExpress from '@adminjs/express'
 import { DidResolver, MemoryCache } from '@atproto/did-resolver'
-import { DataSource } from 'typeorm'
 import { createServer } from './lexicon/index.js'
 import feedGeneration from './methods/feed-generation.js'
 import describeGenerator from './methods/describe-generator.js'
@@ -13,45 +12,59 @@ import { AppContext, Config } from './config.js'
 import wellKnown from './well-known.js'
 import { Post } from './entity/post.js'
 import { SubState } from './entity/sub-state.js'
-
+import { Controller } from './controller.js'
+import { Subscriber } from './entity/subscriber.js'
 
 export class FeedGenerator {
   public app: express.Application
   public server?: http.Server
-  public db: DataSource
+  controller: Controller
   public firehose: FirehoseSubscription
   public cfg: Config
 
+  /** */
   constructor(
     app: express.Application,
-    db: DataSource,
+    controller: Controller,
     firehose: FirehoseSubscription,
     cfg: Config,
   ) {
     this.app = app
-    this.db = db
+    this.controller = controller
     this.firehose = firehose
     this.cfg = cfg
   }
 
-  static create(db: DataSource, cfg: Config) {
+  /**
+   * Creates a new FeedGenerator instance.
+   * @param db The database connection.
+   * @param cfg The configuration.
+   * @returns A new FeedGenerator instance.
+   */
+  static create(controller: Controller, cfg: Config) {
     const app = express()
 
     const adminOptions = {
-      resources: [Post, SubState],
+      resources: [Post, SubState, Subscriber],
     }
     // Setup AdminJS
     const admin = new AdminJS(adminOptions)
     const adminRouter = AdminJsExpress.buildRouter(admin)
     admin.watch()
 
-    const firehose = new FirehoseSubscription(db, cfg.subscriptionEndpoint)
-
     const didCache = new MemoryCache()
     const didResolver = new DidResolver(
       { plcUrl: 'https://plc.directory' },
       didCache,
     )
+
+    const ctx: AppContext = {
+      controller,
+      didResolver,
+      cfg,
+    }
+
+    const firehose = new FirehoseSubscription(ctx)
 
     const server = createServer({
       validateResponse: true,
@@ -62,19 +75,13 @@ export class FeedGenerator {
       },
     })
 
-    const ctx: AppContext = {
-      db,
-      didResolver,
-      cfg,
-    }
-
     feedGeneration(server, ctx)
     describeGenerator(server, ctx)
     app.use(server.xrpc.router)
     app.use(wellKnown(ctx))
     app.use(admin.options.rootPath, adminRouter)
 
-    return new FeedGenerator(app, db, firehose, cfg)
+    return new FeedGenerator(app, controller, firehose, cfg)
   }
 
   async start(): Promise<http.Server> {

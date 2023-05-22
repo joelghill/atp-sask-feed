@@ -3,13 +3,13 @@ import {
   OutputSchema as RepoEvent,
   isCommit,
 } from './lexicon/types/com/atproto/sync/subscribeRepos.js'
-import { FirehoseSubscriptionBase, getOpsByType } from './util/subscription.js'
-import { In } from 'typeorm'
+import { OperationsByType } from './operations.js'
+import { FirehoseSubscriptionBase } from './util/subscription.js'
 
 export class FirehoseSubscription extends FirehoseSubscriptionBase {
   async handleEvent(evt: RepoEvent) {
     if (!isCommit(evt)) return
-    const ops = await getOpsByType(evt)
+    const ops = await OperationsByType.fromCommit(evt)
 
     // This logs the text of every post off the firehose.
     // Just for fun :)
@@ -24,22 +24,13 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
         // only alf-related posts
         return create.record.text.toLowerCase().includes('alf')
       })
-      .map((create) => {
-        // map alf-related posts to a db row
-        const post = new Post()
-        post.uri = create.uri
-        post.cid = create.cid
-        post.replyParent = create.record?.reply?.parent.uri ?? null
-        post.replyRoot = create.record?.reply?.root.uri ?? null
-        post.indexedAt = new Date() 
-        return post    
-      })
+      .map((create) => Post.fromRecord(create))
 
     if (postsToDelete.length > 0) {
-      await this.posts.delete({ uri: In(postsToDelete) })
+      await this.controller.deletePosts(postsToDelete)
     }
     if (postsToCreate.length > 0) {
-      this.posts.save(postsToCreate)
+      this.controller.addPosts(postsToCreate)
     }
   }
 }

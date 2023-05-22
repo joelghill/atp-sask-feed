@@ -1,8 +1,9 @@
 import { DataSource } from 'typeorm'
 import { DidResolver } from '@atproto/did-resolver'
+import { Controller } from './controller.js'
 
 export type AppContext = {
-  db: DataSource
+  controller: Controller
   didResolver: DidResolver
   cfg: Config
 }

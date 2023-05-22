@@ -1,17 +1,11 @@
 import { InvalidRequestError } from '@atproto/xrpc-server'
 import { QueryParams } from '../lexicon/types/app/bsky/feed/getFeedSkeleton.js'
 import { AppContext } from '../config.js'
-import { Post } from '../entity/post.js'
 
 export const uri = 'at://did:example:alice/app.bsky.feed.generator/whats-alf'
 
 export const handler = async (ctx: AppContext, params: QueryParams) => {
-  let builder = ctx.db
-    .getRepository(Post)
-    .createQueryBuilder('post')
-    .orderBy('post.indexedAt', 'DESC')
-    .orderBy('post.cid', 'DESC')
-    .limit(params.limit)
+  let builder = ctx.controller.getPostQueryBuilder(params.limit)
 
   if (params.cursor) {
     const [indexedAt, cid] = params.cursor.split('::')
@@ -19,10 +13,7 @@ export const handler = async (ctx: AppContext, params: QueryParams) => {
       throw new InvalidRequestError('malformed cursor')
     }
     const indexedAtDate = new Date(parseInt(indexedAt, 10))
-    builder = builder
-      .where('post.indexedAt < :indexedAtDate', { indexedAtDate })
-      .orWhere((qb) => qb.where('post.indexedAt = :indexedAtDate', { indexedAtDate }))
-      .where('post.cid < :cid', { cid })
+    builder = ctx.controller.filterByCidOrIndexedAt(builder, cid, indexedAtDate)
   }
   const res = await builder.getMany()
 

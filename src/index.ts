@@ -3,6 +3,7 @@ import FeedGenerator from './server.js'
 import AdminJS from 'adminjs'
 import * as AdminJSTypeorm from '@adminjs/typeorm'
 import { sqliteDatSource } from './data-source.js'
+import { Controller } from './controller.js'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -21,11 +22,11 @@ const run = async () => {
     .catch((err) => {
       console.log(err)
     })
-
+  const controller = new Controller(db)
   const hostname = maybeStr(process.env.FEEDGEN_HOSTNAME) ?? 'example.com'
   const serviceDid =
     maybeStr(process.env.FEEDGEN_SERVICE_DID) ?? `did:web:${hostname}`
-  const server = FeedGenerator.create(db, {
+  const server = FeedGenerator.create(controller, {
     port: maybeInt(process.env.FEEDGEN_PORT) ?? 3000,
     sqliteLocation: maybeStr(process.env.FEEDGEN_SQLITE_LOCATION) ?? ':memory:',
     subscriptionEndpoint:

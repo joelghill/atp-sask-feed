@@ -1,4 +1,6 @@
+import { Record as PostRecord } from '../lexicon/types/app/bsky/feed/post.js'
 import { BaseEntity, Entity, Column, PrimaryColumn } from 'typeorm'
+import { CreateOp } from '../operations.js'
 
 @Entity()
 export class Post extends BaseEntity {
@@ -16,4 +18,20 @@ export class Post extends BaseEntity {
 
   @Column()
   indexedAt: Date
+
+  /**
+   * Instantiates a Post from a CreateOp<PostRecord>
+   * @param create The CreateOp<PostRecord> to instantiate from
+   * @returns A new Post instance
+   */
+  static fromRecord(create: CreateOp<PostRecord>) {
+    const post = new Post()
+    post.uri = create.uri
+    post.cid = create.cid
+    post.replyParent = create.record?.reply?.parent.uri ?? null
+    post.replyRoot = create.record?.reply?.root.uri ?? null
+    post.indexedAt = new Date()
+
+    return post
+  }
 }
