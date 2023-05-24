@@ -5,6 +5,7 @@ import { Post } from './entity/post.js'
 import { SubState } from './entity/sub-state.js'
 import { Subscriber } from './entity/subscriber.js'
 import { Config } from './config.js'
+import { Session } from './entity/session.js'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -22,7 +23,7 @@ export async function getDataSource(config: Config): Promise<DataSource> {
     db = new DataSource({
       type: 'sqlite',
       database: config.sqliteLocation,
-      entities: [Post, SubState, Subscriber],
+      entities: [Post, SubState, Subscriber, Session],
       synchronize: true,
     })
   }

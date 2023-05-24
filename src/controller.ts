@@ -3,12 +3,16 @@ import { Post } from './entity/post.js'
 import { SubState } from './entity/sub-state.js'
 import { Subscriber } from './entity/subscriber.js'
 import { SelectQueryBuilder } from 'typeorm'
+import { Session } from './entity/session.js'
+import  typeormStore from 'typeorm-store'
+
 
 /** Controller class servs as an interface with the db */
 export class Controller {
   private posts: Repository<Post>
   private subStates: Repository<SubState>
   private subscribers: Repository<Subscriber>
+  private sessionStore: typeormStore.TypeormStore
 
   /**
    * Constructs a new controller.
@@ -18,6 +22,16 @@ export class Controller {
     this.subStates = this.db.getRepository(SubState)
     this.posts = this.db.getRepository(Post)
     this.subscribers = this.db.getRepository(Subscriber)
+    this.sessionStore = new typeormStore.TypeormStore({
+      repository: this.db.getRepository(Session),
+    })
+  }
+
+  /**
+   * Gets the session store.
+   */
+  get session() {
+    return this.sessionStore
   }
 
   /**

@@ -1,11 +1,15 @@
 import dotenv from 'dotenv'
+import express from 'express'
 import { DidResolver } from '@atproto/did-resolver'
 import { Controller } from './controller.js'
+import { Server } from './lexicon/index.js'
 
 /**
  * The app context.
  */
 export type AppContext = {
+  currentApp: express.Application
+  atp: Server
   controller: Controller
   didResolver: DidResolver
   cfg: Config
@@ -26,6 +30,7 @@ export type Config = {
   sqliteLocation: string
   subscriptionEndpoint: string
   serviceDid: string
+  adminDid: string
 }
 
 /**
@@ -74,5 +79,6 @@ export const getConfig = (): Config => {
     dbUsername: maybeStr(process.env.FL_DB_USERNAME) ?? 'postgres',
     dbPassword: maybeStr(process.env.FL_DB_PASSWORD) ?? 'postgres',
     dbName: maybeStr(process.env.FL_DB_NAME) ?? 'feedgen',
+    adminDid: maybeStr(process.env.FL_ADMIN_DID) ?? '',
   }
 }
