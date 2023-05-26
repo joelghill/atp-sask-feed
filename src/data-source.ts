@@ -1,3 +1,4 @@
+
 import { DataSource } from 'typeorm'
 import AdminJS from 'adminjs'
 import * as AdminJSTypeorm from '@adminjs/typeorm'
@@ -46,4 +47,16 @@ export async function getDataSource(config: Config): Promise<DataSource> {
   }
 
   throw new Error(`Unknown database type: ${config.dbType}`)
+}
+
+
+export async function getTestDataSource(): Promise<DataSource> {
+  const db = new DataSource({
+    type: 'better-sqlite3',
+    database: ':memory:',
+    entities: [Post, SubState, Subscriber, Session],
+    synchronize: true,
+  })
+  await db.initialize()
+  return db
 }

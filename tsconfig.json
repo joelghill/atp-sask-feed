@@ -14,8 +14,13 @@
     "skipLibCheck": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    },
   },
-  "baseUrl": "./src",
   "include": [
     "./src/**/*.ts"
   ],
