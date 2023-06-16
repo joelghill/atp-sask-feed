@@ -23,6 +23,7 @@ export type Config = {
   listenhost: string
   hostname: string
   dbType: string
+  dbUrl: string | undefined
   dbHost: string
   dbPort: number
   dbUsername: string
@@ -77,6 +78,7 @@ export const getConfig = (): Config => {
       'wss://bsky.social',
     hostname,
     serviceDid,
+    dbUrl: maybeStr(process.env.FEEDGEN_DB_URL),
     dbType: maybeStr(process.env.FEEDGEN_DB_TYPE) ?? 'sqlite',
     dbHost: maybeStr(process.env.FEEDGEN_DB_HOST) ?? 'localhost',
     dbPort: maybeInt(process.env.FEEDGEN_DB_PORT) ?? 5432,
