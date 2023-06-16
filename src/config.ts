@@ -65,26 +65,26 @@ const maybeInt = (val?: string) => {
 export const getConfig = (): Config => {
   dotenv.config()
 
-  const hostname = maybeStr(process.env.FL_HOSTNAME) ?? 'feed.flatlander.social'
+  const hostname = maybeStr(process.env.FEEDGEN_HOSTNAME) ?? 'feed.flatlander.social'
   const serviceDid =
-    maybeStr(process.env.FL_SERVICE_DID) ?? `did:web:${hostname}`
+    maybeStr(process.env.FEEDGEN_SERVICE_DID) ?? `did:web:${hostname}`
   return {
-    listenhost: maybeStr(process.env.FL_LISTEN_HOST) ?? 'localhost',
-    port: maybeInt(process.env.FL_PORT) ?? 3000,
-    sqliteLocation: maybeStr(process.env.FL_SQLITE_LOCATION) ?? 'db.sqlite',
+    listenhost: maybeStr(process.env.FEEDGEN_LISTEN_HOST) ?? 'localhost',
+    port: maybeInt(process.env.FEEDGEN_PORT) ?? 3000,
+    sqliteLocation: maybeStr(process.env.FEEDGEN_SQLITE_LOCATION) ?? 'db.sqlite',
     subscriptionEndpoint:
-      maybeStr(process.env.FL_SUBSCRIPTION_ENDPOINT) ??
+      maybeStr(process.env.FEEDGEN_SUBSCRIPTION_ENDPOINT) ??
       'wss://bsky.social',
     hostname,
     serviceDid,
-    dbType: maybeStr(process.env.FL_DB_TYPE) ?? 'sqlite',
-    dbHost: maybeStr(process.env.FL_DB_HOST) ?? 'localhost',
-    dbPort: maybeInt(process.env.FL_DB_PORT) ?? 5432,
-    dbUsername: maybeStr(process.env.FL_DB_USERNAME) ?? 'postgres',
-    dbPassword: maybeStr(process.env.FL_DB_PASSWORD) ?? 'postgres',
-    dbName: maybeStr(process.env.FL_DB_NAME) ?? 'feedgen',
-    adminDid: maybeStr(process.env.FL_ADMIN_DID) ?? '',
-    publisherDid: maybeStr(process.env.FL_PUBLISHER_DID) ?? '',
-    subscriptionReconnectDelay: maybeInt(process.env.FL_SUBSCRIPTION_RECONNECT_DELAY) ?? 1000,
+    dbType: maybeStr(process.env.FEEDGEN_DB_TYPE) ?? 'sqlite',
+    dbHost: maybeStr(process.env.FEEDGEN_DB_HOST) ?? 'localhost',
+    dbPort: maybeInt(process.env.FEEDGEN_DB_PORT) ?? 5432,
+    dbUsername: maybeStr(process.env.FEEDGEN_DB_USERNAME) ?? 'postgres',
+    dbPassword: maybeStr(process.env.FEEDGEN_DB_PASSWORD) ?? 'postgres',
+    dbName: maybeStr(process.env.FEEDGEN_DB_NAME) ?? 'feedgen',
+    adminDid: maybeStr(process.env.FEEDGEN_ADMIN_DID) ?? '',
+    publisherDid: maybeStr(process.env.FEEDGEN_PUBLISHER_DID) ?? '',
+    subscriptionReconnectDelay: maybeInt(process.env.FEEDGEN_SUBSCRIPTION_RECONNECT_DELAY) ?? 1000,
   }
 }
