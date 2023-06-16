@@ -16,7 +16,8 @@ export const saskKeywords = [
   'bunny-hug',
   'land of the living skies',
   'western canada',
-  'prairie',
+  'canadian prairies',
+  'canadian prairie',
   'prairie province',
   'prairie provinces',
 
@@ -96,7 +97,6 @@ export const saskKeywords = [
   'goodsoil',
   'canora',
   'kamsack',
-  'big river',
   'shellbrook',
   'turtleford',
   'macklin',
