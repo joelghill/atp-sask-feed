@@ -2,11 +2,12 @@
 import { DataSource } from 'typeorm'
 import AdminJS from 'adminjs'
 import * as AdminJSTypeorm from '@adminjs/typeorm'
-import { Post } from './entity/post.js'
-import { SubState } from './entity/sub-state.js'
-import { Subscriber } from './entity/subscriber.js'
-import { Config } from './config.js'
-import { Session } from './entity/session.js'
+import { Post } from '../entity/post.js'
+import { SubState } from '../entity/sub-state.js'
+import { Subscriber } from '../entity/subscriber.js'
+import { Config, getConfig } from '../config.js'
+import { Session } from '../entity/session.js'
+import { get } from 'http'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -18,14 +19,15 @@ AdminJS.registerAdapter({
  * @param config The configuration.
  * @returns An initialized DataSource instance.
  */
-export async function getDataSource(config: Config): Promise<DataSource> {
+export async function getDataSource(config: Config, initialize: boolean=true): Promise<DataSource> {
   let db: DataSource | undefined = undefined
   if (config.dbType === 'sqlite') {
     db = new DataSource({
-      type: 'sqlite',
+      type: 'better-sqlite3',
       database: config.sqliteLocation,
       entities: [Post, SubState, Subscriber, Session],
-      synchronize: true,
+      migrations: ['src/migrations/*.ts'],
+      migrationsRun: true,
     })
   }
   if (config.dbType === 'postgres') {
@@ -36,17 +38,21 @@ export async function getDataSource(config: Config): Promise<DataSource> {
       username: config.dbUsername,
       password: config.dbPassword,
       database: config.dbName,
-      entities: [Post, SubState, Subscriber],
-      synchronize: true,
+      entities: [Post, SubState, Subscriber, Session],
+      migrations: ['src/migrations/*.ts'],
+      migrationsRun: true,
     })
   }
 
-  if (db) {
-    await db.initialize()
-    return db
+  if (!db) {
+    throw new Error(`Unknown database type: ${config.dbType}`)
   }
 
-  throw new Error(`Unknown database type: ${config.dbType}`)
+  if (initialize) {
+    await db.initialize()
+  }
+
+  return db
 }
 
 

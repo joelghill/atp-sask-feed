@@ -1,5 +1,5 @@
 import FeedGenerator from './server.js'
-import { getDataSource } from './data-source.js'
+import { getDataSource } from './datasource/definitions.js'
 import { Controller } from './controller.js'
 import { getConfig } from './config.js'
 

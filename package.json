@@ -11,7 +11,8 @@
     "publishFeed": "ts-node --esm scripts/publishFeedGen.ts",
     "start": "ts-node --esm src/index.ts",
     "build": "tsc",
-    "test": "yarn node --experimental-vm-modules $(yarn bin jest)"
+    "test": "yarn node --experimental-vm-modules $(yarn bin jest)",
+    "typeorm": "typeorm-ts-node-esm"
   },
   "dependencies": {
     "@adminjs/express": "^6.0.0",

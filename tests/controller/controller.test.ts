@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm'
 import { Controller } from '../../src/controller'
-import { getTestDataSource } from '../../src/data-source'
+import { getTestDataSource } from '../../src/datasource/definitions'
 
 let db: DataSource
 
