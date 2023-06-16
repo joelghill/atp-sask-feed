@@ -6,9 +6,7 @@ import { CreateOp } from '@/operations.js'
 import { Post } from '../entity/post.js'
 import { saskKeywords } from './keywords.js'
 
-export const uri = (did: string) => {
-  return `at://${did}/app.bsky.feed.generator/flatlanders`
-}
+export const shortname = 'flatlanders'
 
 export const handler = async (controller: Controller, params: QueryParams) => {
   let builder = controller.getPostQueryBuilder(params.limit)

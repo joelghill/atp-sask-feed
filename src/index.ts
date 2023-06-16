@@ -15,7 +15,7 @@ const run = async () => {
   const server = FeedGenerator.create(controller, config)
   await server.start()
   console.log(
-    `🤖 running feed generator at http://localhost:${server.cfg.port}`,
+    `🤖 running feed generator at http://${server.cfg.listenhost}:${server.cfg.port}`,
   )
 }
 

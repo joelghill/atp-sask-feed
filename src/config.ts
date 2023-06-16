@@ -20,6 +20,7 @@ export type AppContext = {
  */
 export type Config = {
   port: number
+  listenhost: string
   hostname: string
   dbType: string
   dbHost: string
@@ -31,6 +32,8 @@ export type Config = {
   subscriptionEndpoint: string
   serviceDid: string
   adminDid: string
+  publisherDid: string
+  subscriptionReconnectDelay: number
 }
 
 /**
@@ -66,6 +69,7 @@ export const getConfig = (): Config => {
   const serviceDid =
     maybeStr(process.env.FL_SERVICE_DID) ?? `did:web:${hostname}`
   return {
+    listenhost: maybeStr(process.env.FL_LISTEN_HOST) ?? 'localhost',
     port: maybeInt(process.env.FL_PORT) ?? 3000,
     sqliteLocation: maybeStr(process.env.FL_SQLITE_LOCATION) ?? 'db.sqlite',
     subscriptionEndpoint:
@@ -80,5 +84,7 @@ export const getConfig = (): Config => {
     dbPassword: maybeStr(process.env.FL_DB_PASSWORD) ?? 'postgres',
     dbName: maybeStr(process.env.FL_DB_NAME) ?? 'feedgen',
     adminDid: maybeStr(process.env.FL_ADMIN_DID) ?? '',
+    publisherDid: maybeStr(process.env.FL_PUBLISHER_DID) ?? '',
+    subscriptionReconnectDelay: maybeInt(process.env.FL_SUBSCRIPTION_RECONNECT_DELAY) ?? 1000,
   }
 }
