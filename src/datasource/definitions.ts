@@ -1,5 +1,4 @@
-
-import { DataSource } from 'typeorm'
+import { DataSource, DataSourceOptions } from 'typeorm'
 import AdminJS from 'adminjs'
 import * as AdminJSTypeorm from '@adminjs/typeorm'
 import { Post } from '../entity/post.js'
@@ -19,7 +18,10 @@ AdminJS.registerAdapter({
  * @param config The configuration.
  * @returns An initialized DataSource instance.
  */
-export async function getDataSource(config: Config, initialize: boolean=true): Promise<DataSource> {
+export async function getDataSource(
+  config: Config,
+  initialize: boolean = true,
+): Promise<DataSource> {
   let db: DataSource | undefined = undefined
   if (config.dbType === 'sqlite') {
     db = new DataSource({
@@ -31,17 +33,31 @@ export async function getDataSource(config: Config, initialize: boolean=true): P
     })
   }
   if (config.dbType === 'postgres') {
-    db = new DataSource({
-      type: 'postgres',
-      host: config.dbHost,
-      port: config.dbPort,
-      username: config.dbUsername,
-      password: config.dbPassword,
-      database: config.dbName,
-      entities: [Post, SubState, Subscriber, Session],
-      migrations: ['src/migrations/*.ts'],
-      migrationsRun: true,
-    })
+
+    // If db URL in config, use it
+    if (config.dbUrl) {
+      const dbConfig = {
+        type: 'postgres',
+        url: config.dbUrl,
+        entities: [Post, SubState, Subscriber, Session],
+        migrations: ['src/migrations/*.ts'],
+        migrationsRun: true,
+      } as DataSourceOptions
+      db = new DataSource(dbConfig)
+    } else {
+      const dbConfig = {
+        type: 'postgres',
+        database: config.dbName,
+        host: config.dbHost,
+        port: config.dbPort,
+        username: config.dbUsername,
+        password: config.dbPassword,
+        entities: [Post, SubState, Subscriber, Session],
+        migrations: ['src/migrations/*.ts'],
+        migrationsRun: true,
+      } as DataSourceOptions
+      db = new DataSource(dbConfig)
+    }
   }
 
   if (!db) {
@@ -54,7 +70,6 @@ export async function getDataSource(config: Config, initialize: boolean=true): P
 
   return db
 }
-
 
 export async function getTestDataSource(): Promise<DataSource> {
   const db = new DataSource({
