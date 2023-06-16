@@ -10,6 +10,9 @@ export class Post extends BaseEntity {
   @Column()
   cid: string
 
+  @Column()
+  author: string
+
   @Column({ type: String, nullable: true })
   replyParent: string | null
 
@@ -28,6 +31,7 @@ export class Post extends BaseEntity {
     const post = new Post()
     post.uri = create.uri
     post.cid = create.cid
+    post.author = create.author
     post.replyParent = create.record?.reply?.parent.uri ?? null
     post.replyRoot = create.record?.reply?.root.uri ?? null
     post.indexedAt = new Date()

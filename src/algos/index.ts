@@ -1,14 +1,17 @@
+import { Controller } from '@/controller.js'
 import { AppContext } from '../config.js'
 import {
   QueryParams,
   OutputSchema as AlgoOutput,
 } from '../lexicon/types/app/bsky/feed/getFeedSkeleton.js'
-import * as whatsAlf from './whats-alf.js'
+import * as flatlanders from './flatlanders.js'
 
-type AlgoHandler = (ctx: AppContext, params: QueryParams) => Promise<AlgoOutput>
+type AlgoHandler = (controller: Controller, params: QueryParams) => Promise<AlgoOutput>
 
-const algos: Record<string, AlgoHandler> = {
-  [whatsAlf.uri]: whatsAlf.handler,
+function getAlgos(ctx: AppContext): Record<string, AlgoHandler> {
+  return {
+    [flatlanders.uri(ctx.cfg.serviceDid)]: flatlanders.handler,
+  }
 }
 
-export default algos
+export default getAlgos

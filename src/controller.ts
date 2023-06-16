@@ -1,11 +1,10 @@
-import { DataSource, Repository, In } from 'typeorm'
+import { DataSource, Repository, In, MoreThanOrEqual, IsNull } from 'typeorm'
 import { Post } from './entity/post.js'
 import { SubState } from './entity/sub-state.js'
 import { Subscriber } from './entity/subscriber.js'
 import { SelectQueryBuilder } from 'typeorm'
 import { Session } from './entity/session.js'
-import  typeormStore from 'typeorm-store'
-
+import typeormStore from 'typeorm-store'
 
 /** Controller class servs as an interface with the db */
 export class Controller {
@@ -106,9 +105,25 @@ export class Controller {
    * Saves a subscriber to the database.
    * @param sub
    */
-  async saveSubscriber(did: string) {
+  async saveSubscriber(did: string, noExpiry: boolean = false) {
     const sub = new Subscriber()
     sub.did = did
+    if (noExpiry) {
+      sub.expiresAt = null
+    } else {
+      // Set expirey to 1 week from now
+      sub.expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+    }
     this.subscribers.save(sub)
+  }
+
+  async subscriberExists(did: string): Promise<boolean> {
+    // Find subscriber by did and if the expiresAt is null or less than now
+    return (
+      (await this.subscribers.findOneBy([
+        { did, expiresAt: IsNull() },
+        { did, expiresAt: MoreThanOrEqual(new Date()) },
+      ])) != null
+    )
   }
 }

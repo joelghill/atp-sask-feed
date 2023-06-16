@@ -1,11 +1,11 @@
 import { InvalidRequestError } from '@atproto/xrpc-server'
 import { AppContext } from '../config.js'
-import algos from '../algos/index.js'
+import getAlgos from '../algos/index.js'
 import { validateAuth } from '../auth.js'
 
 export default function (ctx: AppContext) {
   ctx.atp.app.bsky.feed.getFeedSkeleton(async ({ params, req }) => {
-    const algo = algos[params.feed]
+    const algo = getAlgos(ctx)[params.feed]
     if (!algo) {
       throw new InvalidRequestError(
         'Unsupported algorithm',
@@ -26,7 +26,7 @@ export default function (ctx: AppContext) {
       ctx.controller.saveSubscriber(requesterDid)
     }
 
-    const body = await algo(ctx, params)
+    const body = await algo(ctx.controller, params)
     return {
       encoding: 'application/json',
       body: body,

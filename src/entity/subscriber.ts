@@ -1,10 +1,20 @@
 /** Containes a class definiton of a community member entity */
 
-import { BaseEntity, Entity, PrimaryColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import {
+  BaseEntity,
+  Entity,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Column,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
 
 @Entity()
 export class Subscriber extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id: number
+
+  @Column()
   did: string
 
   @CreateDateColumn()
@@ -12,4 +22,7 @@ export class Subscriber extends BaseEntity {
 
   @UpdateDateColumn()
   lastUpdated: Date
+
+  @Column({ type: 'date', nullable: true })
+  expiresAt: Date | null
 }

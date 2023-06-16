@@ -9,9 +9,9 @@
             "request": "launch",
             "name": "Debug",
             "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "npm",
+            "runtimeExecutable": "yarn",
             "runtimeArgs": [
-                "run-script",
+                "run",
                 "start"
             ]
         }
