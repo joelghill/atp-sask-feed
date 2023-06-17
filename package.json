@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "publishFeed": "ts-node --esm scripts/publishFeedGen.ts",
-    "start": "ts-node --esm src/index.ts",
+    "start": "ts-node --esm src/index.ts --strict-ssl=false",
     "build": "tsc",
     "test": "yarn node --experimental-vm-modules $(yarn bin jest)",
     "typeorm": "typeorm-ts-node-esm"
