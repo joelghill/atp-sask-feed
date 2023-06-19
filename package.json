@@ -13,7 +13,7 @@
     "build": "tsc",
     "test": "yarn node --experimental-vm-modules $(yarn bin jest)",
     "typeorm": "typeorm-ts-node-esm",
-    "build:digitalocean": "yarn install --production=false && yarn run build && rm -rf node_modules && yarn install --production --frozen-lockfile",
+    "build_digitalocean": "yarn install --production=false && yarn run build && rm -rf node_modules && yarn install --production --frozen-lockfile",
   },
   "dependencies": {
     "@adminjs/express": "^6.0.0",
