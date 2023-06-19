@@ -1,5 +1,7 @@
 import dotenv from 'dotenv'
-import { AtpAgent, BlobRef } from '@atproto/api'
+import pkg from '@atproto/api'
+const { AtpAgent } = pkg
+import { BlobRef } from '@atproto/lexicon'
 import fs from 'fs/promises'
 import { ids } from '../src/lexicon/lexicons.js'
 

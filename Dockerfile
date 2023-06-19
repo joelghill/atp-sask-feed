@@ -16,4 +16,4 @@ RUN yarn install
 COPY . /app/
 RUN yarn build
 CMD ["yarn", "start"]
-EXPOSE 3000 
+EXPOSE 80 443 3000
