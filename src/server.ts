@@ -8,6 +8,7 @@ import describeGenerator from './methods/describe-generator.js'
 import { FirehoseSubscription } from './subscription.js'
 import { AppContext, Config } from './config.js'
 import wellKnown from './well-known.js'
+import healthCheck from './health-check.js'
 import { Controller } from './controller.js'
 import { initAdmin } from './admin/index.js'
 
@@ -73,6 +74,7 @@ export class FeedGenerator {
     describeGenerator(ctx)
     app.use(server.xrpc.router)
     app.use(wellKnown(ctx))
+    app.use(healthCheck())
 
     return new FeedGenerator(app, controller, firehose, cfg)
   }
