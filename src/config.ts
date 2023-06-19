@@ -70,7 +70,7 @@ export const getConfig = (): Config => {
   const serviceDid =
     maybeStr(process.env.FEEDGEN_SERVICE_DID) ?? `did:web:${hostname}`
   return {
-    listenhost: maybeStr(process.env.FEEDGEN_LISTEN_HOST) ?? 'localhost',
+    listenhost: maybeStr(process.env.FEEDGEN_LISTENHOST) ?? 'localhost',
     port: maybeInt(process.env.FEEDGEN_PORT) ?? 3000,
     sqliteLocation: maybeStr(process.env.FEEDGEN_SQLITE_LOCATION) ?? 'db.sqlite',
     subscriptionEndpoint:
