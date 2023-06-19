@@ -1,6 +1,8 @@
 FROM node:18-alpine
 
 ENV NODE_ENV=production
+# Attmptig to fix "Error: self-signed certificate in certificate chain"
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 WORKDIR /app
 
