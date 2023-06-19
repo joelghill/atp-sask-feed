@@ -54,5 +54,5 @@ COPY .yarn ./.yarn
 RUN yarn install
 COPY . /app/
 RUN yarn build
-CMD ["yarn", "start"]
+ENTRYPOINT ["yarn", "start"]
 EXPOSE ${FEEDGEN_PORT}
