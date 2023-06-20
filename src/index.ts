@@ -9,11 +9,14 @@ import { getConfig } from './config.js'
  */
 const run = async () => {
   const config = getConfig()
-  console.log('Starting app with config: ', config)
+  console.log('Initializing database')
   const db = await getDataSource(config)
+  console.log('Initializing controller')
   const controller = new Controller(db)
 
+  console.log('Initializing server')
   const server = FeedGenerator.create(controller, config)
+  console.log('Starting server')
   await server.start()
   console.log(
     `🤖 running feed generator at http://${server.cfg.listenhost}:${server.cfg.port}`,
