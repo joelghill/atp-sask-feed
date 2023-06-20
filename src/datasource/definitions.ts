@@ -42,6 +42,7 @@ export async function getDataSource(
       migrations: ['src/migrations/*.ts'],
       migrationsRun: true,
       ssl: {
+        rejectUnauthorized: true,
         ca: config.dbSSLCert,
       },
     } as DataSourceOptions
