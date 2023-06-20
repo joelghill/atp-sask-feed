@@ -42,7 +42,6 @@ export class Controller {
     return this.posts
       .createQueryBuilder('post')
       .orderBy('post.indexedAt', 'DESC')
-      .orderBy('post.cid', 'DESC')
       .limit(limit)
   }
 
@@ -64,6 +63,7 @@ export class Controller {
         qb.where('post.indexedAt = :indexedAtDate', { indexedAt }),
       )
       .where('post.cid < :cid', { cid })
+      .orderBy('post.indexedAt', 'DESC')
   }
 
   /**
@@ -106,8 +106,12 @@ export class Controller {
    * @param sub
    */
   async saveSubscriber(did: string, noExpiry: boolean = false) {
-    const sub = new Subscriber()
-    sub.did = did
+
+    let sub = await this.subscribers.findOneBy({ did })
+    if (!sub) {
+      sub = new Subscriber()
+      sub.did = did
+    }
     if (noExpiry) {
       sub.expiresAt = null
     } else {
