@@ -80,8 +80,6 @@ export class FeedGenerator {
   }
 
   async start(): Promise<http.Server> {
-    console.log('Starting feed generator...')
-    console.log('Config: ', this.cfg)
     this.firehose.run(this.cfg.subscriptionReconnectDelay)
     this.server = this.app.listen(this.cfg.port, this.cfg.listenhost)
     await events.once(this.server, 'listening')

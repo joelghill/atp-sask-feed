@@ -9,6 +9,7 @@ import { getConfig } from './config.js'
  */
 const run = async () => {
   const config = getConfig()
+  console.log('Starting app with config: ', config)
   const db = await getDataSource(config)
   const controller = new Controller(db)
 
