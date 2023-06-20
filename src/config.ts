@@ -29,6 +29,7 @@ export type Config = {
   dbUsername: string
   dbPassword: string
   dbName: string
+  dbSSLCert: string
   sqliteLocation: string
   subscriptionEndpoint: string
   serviceDid: string
@@ -85,6 +86,7 @@ export const getConfig = (): Config => {
     dbUsername: maybeStr(process.env.FEEDGEN_DB_USERNAME) ?? 'postgres',
     dbPassword: maybeStr(process.env.FEEDGEN_DB_PASSWORD) ?? 'postgres',
     dbName: maybeStr(process.env.FEEDGEN_DB_NAME) ?? 'feedgen',
+    dbSSLCert: maybeStr(process.env.FEEDGEN_DB_SSL_CERT) ?? '',
     adminDid: maybeStr(process.env.FEEDGEN_ADMIN_DID) ?? '',
     publisherDid: maybeStr(process.env.FEEDGEN_PUBLISHER_DID) ?? '',
     subscriptionReconnectDelay: maybeInt(process.env.FEEDGEN_SUBSCRIPTION_RECONNECT_DELAY) ?? 1000,

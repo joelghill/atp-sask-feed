@@ -4,9 +4,8 @@ import * as AdminJSTypeorm from '@adminjs/typeorm'
 import { Post } from '../entity/post.js'
 import { SubState } from '../entity/sub-state.js'
 import { Subscriber } from '../entity/subscriber.js'
-import { Config, getConfig } from '../config.js'
+import { Config } from '../config.js'
 import { Session } from '../entity/session.js'
-import { get } from 'http'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -23,6 +22,8 @@ export async function getDataSource(
   initialize: boolean = true,
 ): Promise<DataSource> {
   let db: DataSource | undefined = undefined
+  let dbConfig: DataSourceOptions | undefined = undefined
+
   if (config.dbType === 'sqlite') {
     db = new DataSource({
       type: 'better-sqlite3',
@@ -33,31 +34,19 @@ export async function getDataSource(
     })
   }
   if (config.dbType === 'postgres') {
-
     // If db URL in config, use it
-    if (config.dbUrl) {
-      const dbConfig = {
-        type: 'postgres',
-        url: config.dbUrl,
-        entities: [Post, SubState, Subscriber, Session],
-        migrations: ['src/migrations/*.ts'],
-        migrationsRun: true,
-      } as DataSourceOptions
-      db = new DataSource(dbConfig)
-    } else {
-      const dbConfig = {
-        type: 'postgres',
-        database: config.dbName,
-        host: config.dbHost,
-        port: config.dbPort,
-        username: config.dbUsername,
-        password: config.dbPassword,
-        entities: [Post, SubState, Subscriber, Session],
-        migrations: ['src/migrations/*.ts'],
-        migrationsRun: true,
-      } as DataSourceOptions
-      db = new DataSource(dbConfig)
-    }
+    dbConfig = {
+      type: 'postgres',
+      url: config.dbUrl,
+      entities: [Post, SubState, Subscriber, Session],
+      migrations: ['src/migrations/*.ts'],
+      migrationsRun: true,
+      ssl: {
+        ca: config.dbSSLCert,
+      },
+    } as DataSourceOptions
+    
+    db = new DataSource(dbConfig)
   }
 
   if (!db) {
