@@ -29,8 +29,7 @@ export async function getDataSource(
       type: 'better-sqlite3',
       database: config.sqliteLocation,
       entities: [Post, SubState, Subscriber, Session],
-      migrations: ['src/migrations/*.ts'],
-      migrationsRun: true,
+      synchronize: true,
     })
   }
   if (config.dbType === 'postgres') {
