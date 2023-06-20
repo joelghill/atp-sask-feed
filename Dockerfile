@@ -1,5 +1,7 @@
 FROM node:18-alpine
 
+ARG FEEDGEN_PORT=3000
+
 # Environment variables
 ENV NODE_ENV=production
 # ENV FEEDGEN_PORT=${FEEDGEN_PORT}
