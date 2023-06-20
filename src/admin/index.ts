@@ -24,21 +24,22 @@ export function initAdmin(appContext: AppContext) {
   const adminRouter = AdminJsExpress.buildAuthenticatedRouter(
     admin,
     {
-        authenticate: (email, password) => authManager.authenticate(email, password),
-        cookieName: 'adminjs',
-        cookiePassword: 'somepassword',
+      authenticate: (email, password) =>
+        authManager.authenticate(email, password),
+      cookieName: 'adminjs',
+      cookiePassword: appContext.cfg.secret,
     },
     null,
     {
-        resave: false,
-        saveUninitialized: false,
-        secret: appContext.cfg.secret,
-        cookie: {   
-            httpOnly: process.env.NODE_ENV === 'production',
-            secure: process.env.NODE_ENV === 'production',
-        },
-        name: 'adminjs',
-        store: appContext.controller.session,
+      resave: false,
+      saveUninitialized: false,
+      secret: appContext.cfg.secret,
+      cookie: {
+        httpOnly: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production',
+      },
+      name: 'adminjs',
+      store: appContext.controller.session,
     } as SessionOptions,
   )
   admin.watch()
