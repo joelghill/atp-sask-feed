@@ -32,7 +32,7 @@ export function initAdmin(appContext: AppContext) {
     {
         resave: false,
         saveUninitialized: false,
-        secret: 'some secret key',
+        secret: appContext.cfg.secret,
         cookie: {   
             httpOnly: process.env.NODE_ENV === 'production',
             secure: process.env.NODE_ENV === 'production',

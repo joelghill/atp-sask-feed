@@ -19,6 +19,7 @@ export type AppContext = {
  * The app configuration.
  */
 export type Config = {
+  secret: string
   port: number
   listenhost: string
   hostname: string
@@ -71,6 +72,7 @@ export const getConfig = (): Config => {
   const serviceDid =
     maybeStr(process.env.FEEDGEN_SERVICE_DID) ?? `did:web:${hostname}`
   return {
+    secret: maybeStr(process.env.FEEDGEN_SECRET) ?? 'CHANGE_ME',
     listenhost: maybeStr(process.env.FEEDGEN_LISTENHOST) ?? 'localhost',
     port: maybeInt(process.env.FEEDGEN_PORT) ?? 3000,
     sqliteLocation: maybeStr(process.env.FEEDGEN_SQLITE_LOCATION) ?? 'db.sqlite',
