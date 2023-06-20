@@ -28,7 +28,11 @@ export class AtpAuthenticator {
         const result = await this.atpAgent.login({ identifier: email, password })
         // Check the DID to make sure it's the admin's
         if (result.data.did != this.ctx.cfg.adminDid) {
+          console.error("Authenticated user's DID does not match admin DID")
           return null
+        }
+        else {
+          console.log("Authenticated admin user: " + result.data.did)
         }
 
         // TODO: Eventually replace this with a call to the user database to get roles
@@ -39,7 +43,7 @@ export class AtpAuthenticator {
         }
     }
     catch (e) {
-        console.log(e)
+        console.error(e)
         return null
     }
   }
