@@ -31,8 +31,8 @@ export function initAdmin(appContext: AppContext) {
     },
     null,
     {
-      resave: false,
-      saveUninitialized: false,
+      resave: true,
+      saveUninitialized: true,
       secret: appContext.cfg.secret,
       cookie: {
         httpOnly: process.env.NODE_ENV === 'production',
@@ -42,7 +42,6 @@ export function initAdmin(appContext: AppContext) {
       store: appContext.controller.session,
     } as SessionOptions,
   )
-  admin.watch()
 
   appContext.currentApp.use(admin.options.rootPath, adminRouter)
 }
