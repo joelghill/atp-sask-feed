@@ -6,7 +6,6 @@ export const saskKeywords = [
   'regina',
   'saskatchewanians',
   'saskatchewanian',
-  'sk',
   'regina',
   'yxe',
   'yqr',
@@ -22,7 +21,6 @@ export const saskKeywords = [
   'prairie provinces',
 
   // Saskatchewan towns, cities, places, etc
-  'aberdeen',
   'alvena',
   'arcola',
   'ashville',
@@ -72,7 +70,6 @@ export const saskKeywords = [
   'prince albert',
   'north battleford',
   'melfort',
-  'melville',
   'wadena',
   'wakaw',
   'la ronge',

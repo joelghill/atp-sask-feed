@@ -55,12 +55,7 @@ export const recordPosts = async (
         console.log(`Suscriber post: ${record.record.text}`)
       } else if (record.record?.text) {
         // If the author is not a subscriber, check text for keywords
-        const text = record.record.text
-        const found = saskKeywords.some((keyword) =>
-          new RegExp('\\b' + keyword + '\\b')
-            .test(text.toLowerCase())
-        )
-        if (found) {
+        if (matchSaskText(record.record.text)) {
           console.log(`Keyword match: ${record.record.text}`)
           posts.push(Post.fromRecord(record))
         }
@@ -70,4 +65,12 @@ export const recordPosts = async (
   }
   await Promise.all(promises)
   controller.addPosts(posts)
+}
+
+export const matchSaskText = (text: string): boolean => {
+  const found = saskKeywords.some((keyword) =>
+    new RegExp('(\\b' + keyword + '\\b)')
+      .test(text.toLowerCase())
+  )
+  return found
 }
