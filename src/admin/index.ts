@@ -31,12 +31,12 @@ export function initAdmin(appContext: AppContext) {
     },
     null,
     {
-      resave: true,
-      saveUninitialized: true,
+      resave: false,
+      saveUninitialized: false,
       secret: appContext.cfg.secret,
       cookie: {
-        httpOnly: process.env.NODE_ENV === 'production',
-        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        secure: true,
       },
       name: 'adminjs',
       store: appContext.controller.session,
