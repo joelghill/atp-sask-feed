@@ -23,7 +23,6 @@ export const saskKeywords = [
 
   // Saskatchewan towns, cities, places, etc
   'aberdeen',
-  'allan',
   'alvena',
   'arcola',
   'ashville',
@@ -33,7 +32,6 @@ export const saskKeywords = [
   'bengough',
   'biggar',
   'birsay',
-  'borden',
   'broadview',
   'bulyea',
   'canora',
