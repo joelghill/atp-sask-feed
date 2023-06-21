@@ -1,9 +1,9 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { SessionEntity } from 'typeorm-store'
 
 @Entity()
 export class Session extends BaseEntity implements SessionEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: string
 
   @Column()

@@ -3,6 +3,9 @@ import datasource  from './datasource/default.js'
 import { Controller } from './controller.js'
 import { getConfig } from './config.js'
 
+
+const db = await datasource.initialize()
+
 /**
  * Runs the feed generator.
  * Loads the configuration, connects to the database, and starts the server.
@@ -10,7 +13,7 @@ import { getConfig } from './config.js'
 const run = async () => {
   const config = getConfig()
   console.log('Initializing controller')
-  const controller = new Controller(datasource)
+  const controller = new Controller(db)
 
   console.log('Initializing server')
   const server = FeedGenerator.create(controller, config)
