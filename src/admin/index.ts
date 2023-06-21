@@ -1,11 +1,17 @@
 import AdminJS from 'adminjs'
 import AdminJsExpress from '@adminjs/express'
+import * as AdminJSTypeorm from '@adminjs/typeorm'
 import { Post } from '../entity/post.js'
 import { SubState } from '../entity/sub-state.js'
 import { Subscriber } from '../entity/subscriber.js'
 import { SessionOptions } from 'express-session'
 import { AppContext } from '../config.js'
 import { AtpAuthenticator } from './auth.js'
+
+AdminJS.registerAdapter({
+  Resource: AdminJSTypeorm.Resource,
+  Database: AdminJSTypeorm.Database,
+})
 
 
 /**
@@ -35,8 +41,8 @@ export function initAdmin(appContext: AppContext) {
       saveUninitialized: false,
       secret: appContext.cfg.secret,
       cookie: {
-        httpOnly: true,
-        secure: true,
+        httpOnly: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production',
       },
       name: 'adminjs',
       store: appContext.controller.session,

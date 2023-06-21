@@ -1,5 +1,5 @@
 import FeedGenerator from './server.js'
-import { getDataSource } from './datasource/definitions.js'
+import datasource  from './datasource/default.js'
 import { Controller } from './controller.js'
 import { getConfig } from './config.js'
 
@@ -9,10 +9,8 @@ import { getConfig } from './config.js'
  */
 const run = async () => {
   const config = getConfig()
-  console.log('Initializing database')
-  const db = await getDataSource(config)
   console.log('Initializing controller')
-  const controller = new Controller(db)
+  const controller = new Controller(datasource)
 
   console.log('Initializing server')
   const server = FeedGenerator.create(controller, config)
