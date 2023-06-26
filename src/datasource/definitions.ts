@@ -4,6 +4,7 @@ import { SubState } from '../entity/sub-state.js'
 import { Subscriber } from '../entity/subscriber.js'
 import { Config } from '../config.js'
 import { Session } from '../entity/session.js'
+import { Flatlander } from '../entity/flatlander.js'
 
 
 /**
@@ -21,7 +22,7 @@ export async function getDataSource(
     db = new DataSource({
       type: 'better-sqlite3',
       database: config.sqliteLocation,
-      entities: [Post, SubState, Subscriber, Session],
+      entities: [Post, SubState, Subscriber, Session, Flatlander],
       synchronize: true,
     })
   }
@@ -30,7 +31,7 @@ export async function getDataSource(
     dbConfig = {
       type: 'postgres',
       url: config.dbUrl,
-      entities: [Post, SubState, Subscriber, Session],
+      entities: [Post, SubState, Subscriber, Session, Flatlander],
       migrations: ['src/migrations/*.ts'],
       migrationsRun: true,
       ssl: {
@@ -53,7 +54,8 @@ export async function getTestDataSource(): Promise<DataSource> {
   const db = new DataSource({
     type: 'better-sqlite3',
     database: ':memory:',
-    entities: [Post, SubState, Subscriber, Session],
+    dropSchema: true,
+    entities: [Post, SubState, Subscriber, Flatlander],
     synchronize: true,
   })
   await db.initialize()

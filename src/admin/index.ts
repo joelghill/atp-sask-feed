@@ -7,6 +7,8 @@ import { Subscriber } from '../entity/subscriber.js'
 import { SessionOptions } from 'express-session'
 import { AppContext } from '../config.js'
 import { AtpAuthenticator } from './auth.js'
+import { Flatlander } from '../entity/flatlander.js'
+import { Session } from '../entity/session.js'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -20,7 +22,7 @@ AdminJS.registerAdapter({
  */
 export function initAdmin(appContext: AppContext) {
   const adminOptions = {
-    resources: [Post, SubState, Subscriber],
+    resources: [Post, SubState, Subscriber, Session, Flatlander],
   }
 
   const authManager = new AtpAuthenticator(appContext)

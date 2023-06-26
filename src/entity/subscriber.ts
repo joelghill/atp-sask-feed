@@ -1,4 +1,4 @@
-/** Containes a class definiton of a community member entity */
+/** Containes a class definiton of a subsciber member entity */
 
 import {
   BaseEntity,

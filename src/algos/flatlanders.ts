@@ -4,7 +4,8 @@ import { Controller } from '@/controller.js'
 import { Record as PostRecord } from '../lexicon/types/app/bsky/feed/post.js'
 import { CreateOp } from '@/operations.js'
 import { Post } from '../entity/post.js'
-import { saskKeywords } from './keywords.js'
+import { SaskKeyword, saskKeywords } from './keywords.js'
+import { Flatlander } from '../entity/flatlander.js'
 
 export const shortname = 'flatlanders'
 
@@ -38,39 +39,65 @@ export const handler = async (controller: Controller, params: QueryParams) => {
 }
 
 /**
+ * Scores a post based on the text matching keywords.
+ * Iterates through the keywords and for each keyword found in the text it adds the keyword's score to the post's score.
+ * If the text matches any excluded keywords, the post is not scored.
+ * @param text The text to score.
+ */
+export const getKeywordMatch = (text: string): SaskKeyword | null => {
+  text = text.toLowerCase()
+
+
+  for (const keyword of saskKeywords) {
+    if (new RegExp('(\\b' + keyword.text + '\\b)').test(text)) {
+      return keyword
+    }
+  }
+  return null
+}
+
+/**
  * Function to take post creation records and return the posts to add to the database.
  */
 export const recordPosts = async (
   createRecords: CreateOp<PostRecord>[],
   controller: Controller,
+  threshhold: number,
 ) => {
-  // For every post creation record, check if the author exists in subscribers.
-  // If they do, add the post to the database.
   const posts: Post[] = []
   const promises: Promise<void>[] = []
   for (const record of createRecords) {
-    const promise = controller.subscriberExists(record.author).then((exists) => {
-      if (exists) {
-        posts.push(Post.fromRecord(record))
-        console.log(`Suscriber post: ${record.record.text}`)
-      } else if (record.record?.text) {
-        // If the author is not a subscriber, check text for keywords
-        if (matchSaskText(record.record.text)) {
-          console.log(`Keyword match: ${record.record.text}`)
-          posts.push(Post.fromRecord(record))
+    let keyword = getKeywordMatch(record.record.text)
+    if (keyword && keyword.toFeed) {
+      console.log(`Post added via keyword: ${record.record.text}.`)
+      posts.push(Post.fromRecord(record))
+    }
+    const promise = controller
+      .getFlatlander(record.author)
+      .then(async (flatlander) => {
+        if (flatlander) {
+          if (keyword?.boostAuthor) {
+            flatlander.score += 1
+            // save flatlander
+            await controller.saveFlatlander(flatlander)
+          }
+          
+          // If there is a tracked person that meets the post threshold
+          // and the post would otherwise be ignored, add it to the feed.
+          if (!keyword?.toFeed && flatlander.isSask(threshhold)) {
+            posts.push(Post.fromRecord(record))
+          }
+        } else if(keyword?.boostAuthor) {
+          // make new flatlander and save
+          flatlander = new Flatlander()
+          flatlander.did = record.author
+          flatlander.score = 1
+          // save flatlander
+          await controller.saveFlatlander(flatlander)
         }
-      }
-    })
+      })
     promises.push(promise)
   }
   await Promise.all(promises)
   controller.addPosts(posts)
-}
-
-export const matchSaskText = (text: string): boolean => {
-  const found = saskKeywords.some((keyword) =>
-    new RegExp('(\\b' + keyword + '\\b)')
-      .test(text.toLowerCase())
-  )
-  return found
 }

@@ -37,6 +37,7 @@ export type Config = {
   adminDid: string
   publisherDid: string
   subscriptionReconnectDelay: number
+  postThreshold: number
 }
 
 /**
@@ -92,5 +93,6 @@ export const getConfig = (): Config => {
     adminDid: maybeStr(process.env.FEEDGEN_ADMIN_DID) ?? '',
     publisherDid: maybeStr(process.env.FEEDGEN_PUBLISHER_DID) ?? '',
     subscriptionReconnectDelay: maybeInt(process.env.FEEDGEN_SUBSCRIPTION_RECONNECT_DELAY) ?? 1000,
+    postThreshold: maybeInt(process.env.FEEDGEN_POST_THRESHOLD) ?? 2,
   }
 }

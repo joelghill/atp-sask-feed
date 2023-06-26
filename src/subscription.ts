@@ -16,6 +16,6 @@ export class FirehoseSubscription extends FirehoseSubscriptionBase {
       await this.controller.deletePosts(postsToDelete)
     }
 
-    recordPosts(ops.posts.creates, this.controller)
+    recordPosts(ops.posts.creates, this.controller, this.context.cfg.postThreshold)
   }
 }

@@ -5,12 +5,14 @@ import { Subscriber } from './entity/subscriber.js'
 import { SelectQueryBuilder } from 'typeorm'
 import { Session } from './entity/session.js'
 import typeormStore from 'typeorm-store'
+import { Flatlander } from './entity/flatlander.js'
 
 /** Controller class servs as an interface with the db */
 export class Controller {
   private posts: Repository<Post>
   private subStates: Repository<SubState>
   private subscribers: Repository<Subscriber>
+  private flatlanders: Repository<Flatlander>
   private sessionStore: typeormStore.TypeormStore
 
   /**
@@ -21,6 +23,7 @@ export class Controller {
     this.subStates = this.db.getRepository(SubState)
     this.posts = this.db.getRepository(Post)
     this.subscribers = this.db.getRepository(Subscriber)
+    this.flatlanders = this.db.getRepository(Flatlander)
     this.sessionStore = new typeormStore.TypeormStore({
       repository: this.db.getRepository(Session),
     })
@@ -106,7 +109,6 @@ export class Controller {
    * @param sub
    */
   async saveSubscriber(did: string, noExpiry: boolean = false) {
-
     let sub = await this.subscribers.findOneBy({ did })
     if (!sub) {
       sub = new Subscriber()
@@ -121,13 +123,19 @@ export class Controller {
     this.subscribers.save(sub)
   }
 
-  async subscriberExists(did: string): Promise<boolean> {
-    // Find subscriber by did and if the expiresAt is null or less than now
-    return (
-      (await this.subscribers.findOneBy([
-        { did, expiresAt: IsNull() },
-        { did, expiresAt: MoreThanOrEqual(new Date()) },
-      ])) != null
-    )
+  /**
+   * Gets a flatlander by did.
+   * @param did The did to get the flatlander for. Must have score above or equal to threshhold.
+   * @returns The subscriber or null if not found.
+   */
+  async getFlatlander(did: string): Promise<Flatlander | null> {
+    return await this.flatlanders.findOneBy({ did: did })
+  }
+
+  /**
+   * Saves a flatlander to the database.
+   */
+  async saveFlatlander(flatlander: Flatlander) {
+    await this.flatlanders.save(flatlander)
   }
 }
