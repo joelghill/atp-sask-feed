@@ -28,6 +28,7 @@
     "@atproto/xrpc-server": "^0.2.0",
     "adminjs": "^7.0.4",
     "better-sqlite3": "^8.3.0",
+    "connect-typeorm": "^2.0.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-formidable": "^1.2.0",
@@ -38,8 +39,7 @@
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.1.6",
     "tslib": "^2.5.2",
-    "typeorm": "^0.3.16",
-    "typeorm-store": "^2.0.1"
+    "typeorm": "^0.3.16"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",

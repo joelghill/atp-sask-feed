@@ -4,8 +4,8 @@ import { SubState } from './entity/sub-state.js'
 import { Subscriber } from './entity/subscriber.js'
 import { SelectQueryBuilder } from 'typeorm'
 import { Session } from './entity/session.js'
-import typeormStore from 'typeorm-store'
 import { Flatlander } from './entity/flatlander.js'
+import { TypeormStore } from 'connect-typeorm'
 
 /** Controller class servs as an interface with the db */
 export class Controller {
@@ -13,7 +13,8 @@ export class Controller {
   private subStates: Repository<SubState>
   private subscribers: Repository<Subscriber>
   private flatlanders: Repository<Flatlander>
-  private sessionStore: typeormStore.TypeormStore
+  private sessions: Repository<Session>
+  public sessionStore: TypeormStore
 
   /**
    * Constructs a new controller.
@@ -24,16 +25,11 @@ export class Controller {
     this.posts = this.db.getRepository(Post)
     this.subscribers = this.db.getRepository(Subscriber)
     this.flatlanders = this.db.getRepository(Flatlander)
-    this.sessionStore = new typeormStore.TypeormStore({
-      repository: this.db.getRepository(Session),
-    })
-  }
+    this.sessions = this.db.getRepository(Session)
+    this.sessionStore = new TypeormStore({
+      cleanupLimit: 2,
+      ttl: 86400,}).connect(this.sessions)
 
-  /**
-   * Gets the session store.
-   */
-  get session() {
-    return this.sessionStore
   }
 
   /**

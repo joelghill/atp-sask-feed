@@ -7,8 +7,9 @@ import feedGeneration from './methods/feed-generation.js'
 import describeGenerator from './methods/describe-generator.js'
 import { FirehoseSubscription } from './subscription.js'
 import { AppContext, Config } from './config.js'
-import wellKnown from './well-known.js'
-import healthCheck from './health-check.js'
+import wellKnown from './api/well-known.js'
+import healthCheck from './api/health-check.js'
+import session from './api/session.js'
 import { Controller } from './controller.js'
 import { initAdmin } from './admin/index.js'
 
@@ -75,6 +76,7 @@ export class FeedGenerator {
     app.use(server.xrpc.router)
     app.use(wellKnown(ctx))
     app.use(healthCheck())
+    app.use(session(ctx))
 
     return new FeedGenerator(app, controller, firehose, cfg)
   }

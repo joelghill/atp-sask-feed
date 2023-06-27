@@ -47,7 +47,7 @@ export function initAdmin(appContext: AppContext) {
         secure: process.env.NODE_ENV === 'production',
       },
       name: 'adminjs',
-      store: appContext.controller.session,
+      store: appContext.controller.sessionStore,
     } as SessionOptions,
   )
 

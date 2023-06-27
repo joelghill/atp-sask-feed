@@ -3379,6 +3379,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/debug@npm:0.0.31":
+  version: 0.0.31
+  resolution: "@types/debug@npm:0.0.31"
+  checksum: d3f2cfa083f0f71015874f4a3e338deb3acbd80fc52c2b4c4eb21e2f28a0f5f5184d0861c8ec2b83e7c1e4db01fc2ec96646ae14fa7028f6da5acdf948b72fcb
+  languageName: node
+  linkType: hard
+
 "@types/estree@npm:*, @types/estree@npm:^1.0.0":
   version: 1.0.1
   resolution: "@types/estree@npm:1.0.1"
@@ -3398,7 +3405,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-session@npm:^1.17.7":
+"@types/express-session@npm:^1.15.5, @types/express-session@npm:^1.17.7":
   version: 1.17.7
   resolution: "@types/express-session@npm:1.17.7"
   dependencies:
@@ -4669,6 +4676,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"connect-typeorm@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "connect-typeorm@npm:2.0.0"
+  dependencies:
+    "@types/debug": 0.0.31
+    "@types/express-session": ^1.15.5
+    debug: ^4.1.1
+    express-session: ^1.15.6
+  peerDependencies:
+    typeorm: ^0.3.0
+  checksum: 48889a1b2c6031f7f643e92ecb9fcee9b2e20d4b6b4f98470ee66111a13caa4de93e5b17e9161f218026ba8d458a344088b8ebff2506eda3a0d3401541307b6b
+  languageName: node
+  linkType: hard
+
 "console-control-strings@npm:^1.0.0, console-control-strings@npm:^1.1.0":
   version: 1.1.0
   resolution: "console-control-strings@npm:1.1.0"
@@ -5217,7 +5238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express-session@npm:^1.17.3":
+"express-session@npm:^1.15.6, express-session@npm:^1.17.3":
   version: 1.17.3
   resolution: "express-session@npm:1.17.3"
   dependencies:
@@ -5322,6 +5343,7 @@ __metadata:
     "@types/node": ^20.2.1
     adminjs: ^7.0.4
     better-sqlite3: ^8.3.0
+    connect-typeorm: ^2.0.0
     dotenv: ^16.0.3
     express: ^4.18.2
     express-formidable: ^1.2.0
@@ -5336,7 +5358,6 @@ __metadata:
     ts-node: ^10.9.1
     tslib: ^2.5.2
     typeorm: ^0.3.16
-    typeorm-store: ^2.0.1
     typescript: ^5.0.4
   languageName: unknown
   linkType: soft
@@ -9595,15 +9616,6 @@ __metadata:
     rxjs:
       optional: true
   checksum: 95821a9e05784b972cc9d152891fd12a56cb4b1a7c57e768c02bea6a8984da7aff8f19404a7b69eea11fae2a3b6c0c510a4c510f575f50162c759ae9059f2520
-  languageName: node
-  linkType: hard
-
-"typeorm-store@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "typeorm-store@npm:2.0.1"
-  peerDependencies:
-    typeorm: ^0.2.7
-  checksum: 4a666d6d8793acc0a51fe96ef1919afa54c58922b41650cec8e2b0d2892c148f317187e54bcabb3033285cf11d8c937177bd1726b9e1ecd0433969e848697e5b
   languageName: node
   linkType: hard
 
