@@ -47,7 +47,6 @@ export const handler = async (controller: Controller, params: QueryParams) => {
 export const getKeywordMatch = (text: string): SaskKeyword | null => {
   text = text.toLowerCase()
 
-
   for (const keyword of saskKeywords) {
     if (new RegExp('(\\b' + keyword.text + '\\b)').test(text)) {
       return keyword
@@ -65,39 +64,35 @@ export const recordPosts = async (
   threshhold: number,
 ) => {
   const posts: Post[] = []
-  const promises: Promise<void>[] = []
   for (const record of createRecords) {
+    // Match keyword entry with post text
     let keyword = getKeywordMatch(record.record.text)
     if (keyword && keyword.toFeed) {
       console.log(`Post added via keyword: ${record.record.text}.`)
       posts.push(Post.fromRecord(record))
     }
-    const promise = controller
-      .getFlatlander(record.author)
-      .then(async (flatlander) => {
-        if (flatlander) {
-          if (keyword?.boostAuthor) {
-            flatlander.score += 1
-            // save flatlander
-            await controller.saveFlatlander(flatlander)
-          }
-          
-          // If there is a tracked person that meets the post threshold
-          // and the post would otherwise be ignored, add it to the feed.
-          if (!keyword?.toFeed && flatlander.isSask(threshhold)) {
-            posts.push(Post.fromRecord(record))
-          }
-        } else if(keyword?.boostAuthor) {
-          // make new flatlander and save
-          flatlander = new Flatlander()
-          flatlander.did = record.author
-          flatlander.score = 1
-          // save flatlander
-          await controller.saveFlatlander(flatlander)
-        }
-      })
-    promises.push(promise)
+    
+    let flatlander = await controller.getFlatlander(record.author)
+    if (flatlander) {
+      if (keyword && keyword?.boostAuthor) {
+        flatlander.score += 1
+        // save flatlander
+        await controller.saveFlatlander(flatlander)
+      }
+
+      // If there is a tracked person that meets the post threshold
+      // and the post would otherwise be ignored, add it to the feed.
+      if (!keyword?.toFeed && flatlander.isSask(threshhold)) {
+        posts.push(Post.fromRecord(record))
+      }
+    } else if (keyword?.boostAuthor) {
+      // make new flatlander and save
+      flatlander = new Flatlander()
+      flatlander.did = record.author
+      flatlander.score = 1
+      // save flatlander
+      await controller.saveFlatlander(flatlander)
+    }
   }
-  await Promise.all(promises)
-  controller.addPosts(posts)
+  await controller.addPosts(posts)
 }
