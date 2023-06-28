@@ -82,12 +82,25 @@ export class Controller {
   }
 
   /**
+   * Checks to see if a post exists in the database.
+   * @param uri 
+   * @returns True if the post exists, false otherwise.
+   */
+  async hasPost(uri: string): Promise<boolean> {
+    const post = await this.posts.findOneBy({ uri })
+    return !!post
+  }
+
+  /**
    * Updates a cursor state for a given service.
    * @param service The service to update the cursor for.
    * @param cursor The new cursor value.
    */
   async updateCursor(service: string, cursor: number) {
-    this.subStates.update({ service }, { cursor })
+    const state = new SubState()
+    state.service = service
+    state.cursor = cursor
+    this.subStates.save(state)
   }
 
   /**

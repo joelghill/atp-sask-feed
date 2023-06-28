@@ -71,7 +71,7 @@ export const recordPosts = async (
       console.log(`Post added via keyword: ${record.record.text}.`)
       posts.push(Post.fromRecord(record))
     }
-    
+
     let flatlander = await controller.getFlatlander(record.author)
     if (flatlander) {
       if (keyword && keyword?.boostAuthor) {
@@ -83,7 +83,23 @@ export const recordPosts = async (
       // If there is a tracked person that meets the post threshold
       // and the post would otherwise be ignored, add it to the feed.
       if (!keyword?.toFeed && flatlander.isSask(threshhold)) {
-        posts.push(Post.fromRecord(record))
+        // If it is a reply, check if the parent is a recorded post.
+        if (record.record.reply) {
+          const isReplyingToSaskPost = await controller.hasPost(
+            record.record.reply.parent.uri,
+          )
+          // If it is, add the reply to the feed.
+          if (isReplyingToSaskPost) {
+            console.log(
+              'Post added via reply to flatlander post: ',
+              record.record.text,
+            )
+            posts.push(Post.fromRecord(record))
+          }
+        } else {
+          console.log('Post added via flatlander post: ', record.record.text)
+          posts.push(Post.fromRecord(record))
+        }
       }
     } else if (keyword?.boostAuthor) {
       // make new flatlander and save
