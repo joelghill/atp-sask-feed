@@ -22,6 +22,7 @@ export class Flatlander extends BaseEntity {
   @UpdateDateColumn()
   lastUpdated: Date
 
+  // Score is the number of times they have mentioned something related to Sask
   @Column({ type: 'int', default: 0 })
   score: number
 

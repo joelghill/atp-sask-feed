@@ -61,7 +61,7 @@ export class Controller {
       .orWhere((qb) =>
         qb.where('post.indexedAt = :indexedAtDate', { indexedAt }),
       )
-      .where('post.cid < :cid', { cid })
+      // .where('post.cid < :cid', { cid })
       .orderBy('post.indexedAt', 'DESC')
   }
 
