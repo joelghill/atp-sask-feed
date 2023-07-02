@@ -39,6 +39,7 @@ export const handler = async (controller: Controller, params: QueryParams) => {
     }
   } catch (e) {
     console.error("Error in flatlanders handler: ", e)
+  }
 }
 
 /**
