@@ -18,7 +18,7 @@ export const handler = async (controller: Controller, params: QueryParams) => {
       throw new InvalidRequestError('malformed cursor')
     }
     const indexedAtDate = new Date(parseInt(indexedAt, 10))
-    builder = controller.filterByCidOrIndexedAt(builder, cid, indexedAtDate)
+    builder = controller.filterByIndexedAt(builder, indexedAtDate, params.limit)
   }
   const res = await builder.getMany()
 

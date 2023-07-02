@@ -51,10 +51,10 @@ export class Controller {
    * @param indexedAt The indexedAt date to filter by.
    * @returns The filtered query.
    */
-  filterByCidOrIndexedAt(
+  filterByIndexedAt(
     query: SelectQueryBuilder<Post>,
-    cid: string,
     indexedAt: Date,
+    limit: number,
   ) {
     return (
       query
@@ -62,8 +62,8 @@ export class Controller {
         .orWhere((qb) =>
           qb.where('post.indexedAt = :indexedAt', { indexedAt: indexedAt }),
         )
-        // .where('post.cid < :cid', { cid })
         .orderBy('post.indexedAt', 'DESC')
+        .limit(limit)
     )
   }
 
