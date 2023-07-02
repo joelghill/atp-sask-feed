@@ -10,32 +10,35 @@ import { Flatlander } from '../entity/flatlander.js'
 export const shortname = 'flatlanders'
 
 export const handler = async (controller: Controller, params: QueryParams) => {
-  let builder = controller.getPostQueryBuilder(params.limit)
+  try {
+    let builder = controller.getPostQueryBuilder(params.limit)
 
-  if (params.cursor) {
-    const [indexedAt, cid] = params.cursor.split('::')
-    if (!indexedAt || !cid) {
-      throw new InvalidRequestError('malformed cursor')
+    if (params.cursor) {
+      const [indexedAt, cid] = params.cursor.split('::')
+      if (!indexedAt || !cid) {
+        throw new InvalidRequestError('malformed cursor')
+      }
+      const indexedAtDate = new Date(parseInt(indexedAt, 10))
+      builder = controller.filterByIndexedAt(builder, indexedAtDate, params.limit)
     }
-    const indexedAtDate = new Date(parseInt(indexedAt, 10))
-    builder = controller.filterByIndexedAt(builder, indexedAtDate, params.limit)
-  }
-  const res = await builder.getMany()
+    const res = await builder.getMany()
 
-  const feed = res.map((row) => ({
-    post: row.uri,
-  }))
+    const feed = res.map((row) => ({
+      post: row.uri,
+    }))
 
-  let cursor: string | undefined
-  const last = res.at(-1)
-  if (last) {
-    cursor = `${last.indexedAt.getTime()}::${last.cid}`
-  }
+    let cursor: string | undefined
+    const last = res.at(-1)
+    if (last) {
+      cursor = `${last.indexedAt.getTime()}::${last.cid}`
+    }
 
-  return {
-    cursor,
-    feed,
-  }
+    return {
+      cursor,
+      feed,
+    }
+  } catch (e) {
+    console.error("Error in flatlanders handler: ", e)
 }
 
 /**
