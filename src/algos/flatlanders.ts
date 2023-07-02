@@ -29,7 +29,7 @@ export const handler = async (controller: Controller, params: QueryParams) => {
   let cursor: string | undefined
   const last = res.at(-1)
   if (last) {
-    cursor = `${new Date(last.indexedAt).getTime()}::${last.cid}`
+    cursor = `${last.indexedAt.getTime()}::${last.cid}`
   }
 
   return {

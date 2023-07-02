@@ -56,13 +56,15 @@ export class Controller {
     cid: string,
     indexedAt: Date,
   ) {
-    return query
-      .where('post.indexedAt < :indexedAtDate', { indexedAt })
-      .orWhere((qb) =>
-        qb.where('post.indexedAt = :indexedAtDate', { indexedAt }),
-      )
-      // .where('post.cid < :cid', { cid })
-      .orderBy('post.indexedAt', 'DESC')
+    return (
+      query
+        .where('post.indexedAt < :indexedAt', { indexedAt: indexedAt })
+        .orWhere((qb) =>
+          qb.where('post.indexedAt = :indexedAt', { indexedAt: indexedAt }),
+        )
+        // .where('post.cid < :cid', { cid })
+        .orderBy('post.indexedAt', 'DESC')
+    )
   }
 
   /**
