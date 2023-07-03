@@ -6,23 +6,27 @@ import { CreateOp } from '@/operations.js'
 import { Post } from '../entity/post.js'
 import { SaskKeyword, saskKeywords } from './keywords.js'
 import { Flatlander } from '../entity/flatlander.js'
+import { SelectQueryBuilder } from 'typeorm'
 
 export const shortname = 'flatlanders'
 
 export const handler = async (controller: Controller, params: QueryParams) => {
-  try {
-    let builder = controller.getPostQueryBuilder(params.limit)
 
+  try {
+    let builder: SelectQueryBuilder<Post>
     if (params.cursor) {
       const [indexedAt, cid] = params.cursor.split('::')
       if (!indexedAt || !cid) {
         throw new InvalidRequestError('malformed cursor')
       }
       const indexedAtDate = new Date(parseInt(indexedAt, 10))
-      builder = controller.filterByIndexedAt(builder, indexedAtDate, params.limit)
+      builder = controller.filterByIndexedAt(indexedAtDate, params.limit)
     }
+    else {
+      builder = controller.getPostQueryBuilder(params.limit)
+    }
+    
     const res = await builder.getMany()
-
     const feed = res.map((row) => ({
       post: row.uri,
     }))

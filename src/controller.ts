@@ -28,8 +28,8 @@ export class Controller {
     this.sessions = this.db.getRepository(Session)
     this.sessionStore = new TypeormStore({
       cleanupLimit: 2,
-      ttl: 86400,}).connect(this.sessions)
-
+      ttl: 86400,
+    }).connect(this.sessions)
   }
 
   /**
@@ -52,19 +52,15 @@ export class Controller {
    * @returns The filtered query.
    */
   filterByIndexedAt(
-    query: SelectQueryBuilder<Post>,
     indexedAt: Date,
     limit: number,
   ) {
-    return (
-      query
-        .where('post.indexedAt < :indexedAt', { indexedAt: indexedAt })
-        .orWhere((qb) =>
-          qb.where('post.indexedAt = :indexedAt', { indexedAt: indexedAt }),
-        )
-        .orderBy('post.indexedAt', 'DESC')
-        .limit(limit)
-    )
+    let isoDate = indexedAt.toISOString()
+    return this.posts
+      .createQueryBuilder('post')
+      .where('post.indexedAt < :indexedAt', { indexedAt: isoDate })
+      .orderBy('post.indexedAt', 'DESC')
+      .limit(limit)
   }
 
   /**
@@ -85,7 +81,7 @@ export class Controller {
 
   /**
    * Checks to see if a post exists in the database.
-   * @param uri 
+   * @param uri
    * @returns True if the post exists, false otherwise.
    */
   async hasPost(uri: string): Promise<boolean> {
